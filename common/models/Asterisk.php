@@ -11,6 +11,6 @@ class Asterisk implements IEventListener
 {
     public function handle(EventMessage $event)
     {
-        var_dump($event);
+        //var_dump($event);
     }
 }

@@ -43,12 +43,12 @@ class PAMIConn extends Model
             $this->asterisk->open();
             $this->peers = $this->asterisk->send(new ListCommandsAction());
             $time = time();
-            while((time() - $time) < 60) // Wait for events 60. or while(true)
-            {
+            //while((time() - $time) < 60) // Wait for events 60. or while(true)
+           // {
                 usleep(1000); // 1ms delay
                 // Since we declare(ticks=1) at the top, the following line is not necessary
                 $this->asterisk->process();
-            }
+           // }
             $this->asterisk->close(); // send logoff and close the connection.
         }catch (Exception $e) {
             echo $e->getMessage() . "\n";

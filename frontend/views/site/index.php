@@ -25,7 +25,7 @@ $this->title = 'My Yii Application';
                 ?>
             </div>
             <div class="col-lg-4">
-                <?= $ast_conn->peers?>
+                <?php  print_r($ast_conn->peers) ?>
             </div>
             <div class="col-lg-4">
 
