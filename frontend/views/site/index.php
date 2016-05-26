@@ -4,6 +4,9 @@
 /* @var ast_conn common/models/PAMIConn */
 
 $this->title = 'My Yii Application';
+
+$ast_conn->init();
+$ast_conn->start();
 ?>
 <div class="site-index">
 
@@ -16,23 +19,18 @@ $this->title = 'My Yii Application';
     </div>
 
     <div class="body-content">
+        Peers
+        <?php foreach ($ast_conn->peers as $peer){ ?>
+    <pre>
+        <?php  print_r($peer->getKeys()); ?>
+    </pre>
+        <?php } ?>
+        Commands
 
-        <div class="row">
-            <div class="col-lg-4">
-                <?php print_r($ast_conn);
-                $ast_conn->init();
-                $ast_conn->start();
-                ?>
-            </div>
-            <div class="col-lg-4">
-                <?php  print_r($ast_conn->peers) ?>
-            </div>
-            <div class="col-lg-4">
+    <pre>
+        <?php  print_r($ast_conn->list_command); ?>
+    </pre>
 
-
-
-            </div>
-        </div>
 
     </div>
 </div>

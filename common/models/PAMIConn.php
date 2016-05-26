@@ -12,6 +12,7 @@ namespace common\models;
 use PAMI\Client\Impl\ClientImpl;
 use PAMI\Message\Action\CommandAction;
 use PAMI\Message\Action\ListCommandsAction;
+use PAMI\Message\Action\SIPPeersAction;
 use yii\base\Model;
 
 class PAMIConn extends Model
@@ -19,6 +20,8 @@ class PAMIConn extends Model
     private $_options;
 
     public $peers;
+
+    public $list_command;
 
     public $asterisk;
     
@@ -41,7 +44,9 @@ class PAMIConn extends Model
             $this->asterisk = new ClientImpl($this->_options);
             $this->asterisk->registerEventListener(new Asterisk());
             $this->asterisk->open();
-            $this->peers = $this->asterisk->send(new ListCommandsAction());
+            $this->list_command = $this->asterisk->send(new ListCommandsAction());
+            $this->peers = $this->asterisk->send(new SIPPeersAction())->getEvents();
+
             $time = time();
             //while((time() - $time) < 60) // Wait for events 60. or while(true)
            // {
