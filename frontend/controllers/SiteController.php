@@ -73,9 +73,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
+        $ast_conn = new PAMIConn();
+        $ast_conn->init();
+        $ast_conn->start();
         return $this->render('index',[
-            'ast_conn' => new PAMIConn()
+            'peers' => $ast_conn->peers,
+            'list_command' => $ast_conn->list_command->getKeys(),
+            'command_action' => $ast_conn->commandAction,
+            'originate' => $ast_conn->originate,
         ]);
     }
 
@@ -215,7 +220,7 @@ class SiteController extends Controller
         ]);
     }
     
-    public function actionAsteriskInfo()
+    public function actionGetAsteriskCommands()
     {
 
     }
