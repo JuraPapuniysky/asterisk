@@ -1,7 +1,7 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\PAMIConn;
+
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -13,6 +13,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use PAMI\Message\Action\OriginateAction;
 
 /**
  * Site controller
@@ -73,15 +74,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $ast_conn = new PAMIConn();
-        $ast_conn->init();
-        $ast_conn->start();
-        return $this->render('index',[
-            'peers' => $ast_conn->peers,
-            'list_command' => $ast_conn->list_command->getKeys(),
-            'command_action' => $ast_conn->commandAction,
-            'originate' => $ast_conn->originate,
-        ]);
+        return $this->render('index');
     }
 
     /**
@@ -219,9 +212,25 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionCall()
+    {
+        $pami = Yii::$app->pamiconn;
+        $pami->init();
+        $aster = $pami->clientImpl;
+        $aster->open();
+        $orig = new OriginateAction('SIP/112');
+        $orig->setContext('default');
+        $orig->setPriority(1);
+        $aster->send($orig);
+        usleep(1000);
+        $aster->process();
+        $aster->close();
+        return $this->render('index');
+    }
     
     public function actionGetAsteriskCommands()
     {
-
+        //TODO
     }
 }

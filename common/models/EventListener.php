@@ -7,7 +7,7 @@ namespace common\models;
 use PAMI\Listener\IEventListener;
 use PAMI\Message\Event\EventMessage;
 
-class Asterisk implements IEventListener
+class EventListener implements IEventListener
 {
     public function handle(EventMessage $event)
     {

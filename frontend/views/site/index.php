@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 
+use yii\helpers\Html;
 
 $this->title = 'My Yii Application';
 
@@ -12,28 +13,25 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
 
-        Peers
-        <?php foreach ($peers as $peer){ ?>
-    <pre>
-        <?php  print_r($peer->getKeys()); ?>
-    </pre>
-        <?php } ?>
-
-        Commands
-
-    <pre>
-        <?php  print_r($list_command); ?>
-    </pre>
-
-        command action
-        <pre>
-        <?php  print_r($command_action); ?>
-    </pre>
-        Originate
-        <pre>
-        <?php  print_r($originate); ?>
-    </pre>
-
+    <?php \yii\widgets\Pjax::begin();?>
+    <?= Html::a('Звонить',['site/call'],['class' =>'btn btn-lg btn-primary']) ?>
+    <?php \yii\widgets\Pjax::end()?>
 
     </div>
 </div>
+<?php
+$script = <<< JS
+
+$('#button').click(function(){
+	//alert('Ok');
+	$.get('index.php?r=site/call'), function(data){
+	var data = $.parseJSON(data);
+	alert(data);
+	}
+	});
+
+
+JS;
+$this->registerJs($script);
+
+?>
