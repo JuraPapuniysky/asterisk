@@ -5,6 +5,10 @@ namespace common\models;
 
 
 use PAMI\Client\Impl\ClientImpl;
+use PAMI\Message\Action\MeetmeListAction;
+use PAMI\Message\Action\MeetmeMuteAction;
+use PAMI\Message\Action\MeetmeUnmuteAction;
+use PAMI\Message\Action\OriginateAction;
 use yii\base\Component;
 
 
@@ -12,38 +16,79 @@ class PAMIConn extends Component
 {
     public $options;
     public $clientImpl;
+    public $generalConference;
 
+    /**
+     * initialization of AMI connection
+     * @throws \PAMI\Client\Exception\ClientException
+     */
     public function init()
     {
         try {
 
             $this->clientImpl = new ClientImpl($this->options);
             $this->clientImpl->registerEventListener(new EventListener());
+            $this->clientImpl->open();
 
 
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage() . "\n";
-       }
+        }
+    }
+
+    /**
+     * Returnd information about connected users to conference $conference
+     * @param $conferese
+     * @return array
+     */
+    public function getConferenceUsers($conferese)
+    {
+        $message = $this->clientImpl->send(new MeetmeListAction($conferese));
+        usleep(1000);
+        return $message->getEvents();
+    }
+
+    /**
+     * Create the call from asterisk yo user $chanell
+     * @param $channel
+     * @return mixed
+     */
+    public function call($channel)
+    {
+        $originate = new OriginateAction($channel);
+        $originate->setContext('default');
+        $originate->setPriority(1);
+        usleep(1000);
+        return $this->clientImpl->send($originate);
+
+    }
+
+    /**
+     * Realization of MeetmeMute asterisk action
+     * @param $conference
+     * @param $user
+     * @return mixed
+     */
+    public function muteUser($conference, $user)
+    {
+        $message = $this->clientImpl->send(new MeetmeMuteAction($conference, $user));
+        usleep(1000);
+        return $message;
+
+    }
+
+    /**
+     * Realization of MeetmeUnmute asterisk action
+     * @param $conference
+     * @param $user
+     * @return mixed
+     */
+    public function unmuteUser($conference, $user)
+    {
+        $message = $this->clientImpl->send(new MeetmeUnmuteAction($conference, $user));
+        usleep(1000);
+        return $message;
     }
 
 
 }
-
-//  $this->list_command = $this->asterisk->send(new ListCommandsAction());
-//     $this->peers = $this->asterisk->send(new SIPPeersAction())->getEvents();
-//     $this->commandAction = $this->asterisk->send(new CommandAction($this->command));
-// $orig = new OriginateAction('SIP/112');
-//  $orig->setContext('default');
-//  $orig->setPriority(1);
-// $this->originate = $this->asterisk->send($orig);
-
-
-
-//$time = time();
-// while((time() - $time) < 60) // Wait for events 60. or while(true)
-//{
-//        usleep(1000); // 1ms delay
-// Since we declare(ticks=1) at the top, the following line is not necessary
-//        $this->asterisk->process();
-// }
-//       $this->asterisk->close(); // send logoff and close the connection.

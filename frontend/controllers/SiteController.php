@@ -80,14 +80,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $aster = self::initPAMIConn();
-        $users = self::getConferenceUsers($aster, 501);
-        usleep(1000);
-        $aster->process();
-        $aster->close();
+        $pami = Yii::$app->pamiconn;
+        $pami->init();
+        $pami->clientImpl;
+        $users = $pami->getConferenceUsers($pami->generalConference);
+        $pami->clientImpl->process();
+        $pami->clientImpl->close();
 
         return $this->render('index',[
-            'module' => $users->getEvents(), //$aster->send(new CommandAction('module show')),
+            'module' => $users, //$aster->send(new CommandAction('module show')),
         ]);
     }
 
@@ -231,18 +232,13 @@ class SiteController extends Controller
     {
         $pami = Yii::$app->pamiconn;
         $pami->init();
-        $aster = $pami->clientImpl;
-        $aster->open();
-        $orig = new OriginateAction('SIP/112');
-        //$orig->setExtension(500);
-        $orig->setContext('default');
-        $orig->setPriority(1);
-        $aster->send($orig);
+
+        $event = $pami->call('SIP/112');
         usleep(1000);
-        $aster->process();
-        $aster->close();
+        $pami->clientImpl->process();
+        $pami->clientImpl->close();
         return $this->render('index',[
-            'module' => $orig, //$aster->send(new CommandAction('module show')),
+            'module' =>$event , //$aster->send(new CommandAction('module show')),
         ]);
     }
     
@@ -253,7 +249,10 @@ class SiteController extends Controller
 
     public function actionRedirect()
     {
-        $aster = self::initPAMIConn();
+        $pami = Yii::$app->pamiconn;
+        $pami->init();
+        $aster = $pami->clientImpl;
+        $aster->open();
         $redir = new RedirectAction('SIP/112', 501, 'dialout', 1);
         $aster->send($redir);
         usleep(1000);
@@ -264,22 +263,4 @@ class SiteController extends Controller
             'module' => $redir, //$aster->send(new CommandAction('module show')),
         ]);
     }
-
-    public static function getConferenceUsers($aster, $conference)
-    {
-        return $aster->send(new MeetmeListAction($conference));
-    }
-
-    public static function initPAMIConn()
-    {
-        $pami = Yii::$app->pamiconn;
-        $pami->init();
-        $aster = $pami->clientImpl;
-        $aster->open();
-        return $aster;
-    }
-
-
-
-    
 }
