@@ -17,21 +17,19 @@ $this->title = 'My Yii Application';
     <?= Html::a('Звонить',['site/call'],['class' =>'btn btn-lg btn-primary']) ?>
     <?php \yii\widgets\Pjax::end()?>
 
+
+
+    <?php \yii\widgets\Pjax::begin();?>
+    <?= Html::a('Подключить к конференции',['site/redirect'],['class' =>'btn btn-lg btn-primary']) ?>
+    <?php \yii\widgets\Pjax::end()?>
+
     </div>
+
+       
+    <?php foreach ($module as $mod){  ?>
+    <pre>
+        <?php print_r($module); ?>
+    </pre>
+    <?php }?>
+
 </div>
-<?php
-$script = <<< JS
-
-$('#button').click(function(){
-	//alert('Ok');
-	$.get('index.php?r=site/call'), function(data){
-	var data = $.parseJSON(data);
-	alert(data);
-	}
-	});
-
-
-JS;
-$this->registerJs($script);
-
-?>

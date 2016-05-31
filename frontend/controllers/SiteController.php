@@ -2,6 +2,12 @@
 namespace frontend\controllers;
 
 
+use PAMI\Message\Action\CommandAction;
+use PAMI\Message\Action\CoreShowChannelsAction;
+use PAMI\Message\Action\DAHDIDialOffHookAction;
+use PAMI\Message\Action\MeetmeListAction;
+use PAMI\Message\Action\MeetmeMuteAction;
+use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -74,7 +80,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $aster = self::initPAMIConn();
+        $users = self::getConferenceUsers($aster, 501);
+        usleep(1000);
+        $aster->process();
+        $aster->close();
+
+        return $this->render('index',[
+            'module' => $users, //$aster->send(new CommandAction('module show')),
+        ]);
     }
 
     /**
@@ -220,17 +234,54 @@ class SiteController extends Controller
         $aster = $pami->clientImpl;
         $aster->open();
         $orig = new OriginateAction('SIP/112');
+        //$orig->setExtension(500);
         $orig->setContext('default');
         $orig->setPriority(1);
         $aster->send($orig);
         usleep(1000);
         $aster->process();
         $aster->close();
-        return $this->render('index');
+        return $this->render('index',[
+            'module' => $orig, //$aster->send(new CommandAction('module show')),
+        ]);
     }
     
     public function actionGetAsteriskCommands()
     {
         //TODO
     }
+
+    public function actionRedirect()
+    {
+        $aster = self::initPAMIConn();
+        $redir = new RedirectAction('SIP/112', 501, 'dialout', 1);
+        $aster->send($redir);
+        usleep(1000);
+
+        $aster->process();
+        $aster->close();
+        return $this->render('index',[
+            'module' => $redir, //$aster->send(new CommandAction('module show')),
+        ]);
+    }
+
+    public static function getConferenceUsers($aster, $conference)
+    {
+        return $aster->send(new MeetmeListAction($conference));
+        $org = new MeetmeListAction(501);
+        $org->getCreatedDate();
+    }
+
+    public static function initPAMIConn()
+    {
+        $pami = Yii::$app->pamiconn;
+        $pami->init();
+        $aster = $pami->clientImpl;
+        $aster->open();
+        return $aster;
+    }
+
+
+
+    
 }
