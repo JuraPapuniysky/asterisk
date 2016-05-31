@@ -28,7 +28,7 @@ $this->title = 'My Yii Application';
        
     <?php foreach ($module as $mod){  ?>
     <pre>
-        <?php print_r($module); ?>
+        <?php print_r($mod->getKeys()); ?>
     </pre>
     <?php }?>
 

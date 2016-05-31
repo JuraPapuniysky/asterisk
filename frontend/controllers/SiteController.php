@@ -87,7 +87,7 @@ class SiteController extends Controller
         $aster->close();
 
         return $this->render('index',[
-            'module' => $users, //$aster->send(new CommandAction('module show')),
+            'module' => $users->getEvents(), //$aster->send(new CommandAction('module show')),
         ]);
     }
 
@@ -268,8 +268,6 @@ class SiteController extends Controller
     public static function getConferenceUsers($aster, $conference)
     {
         return $aster->send(new MeetmeListAction($conference));
-        $org = new MeetmeListAction(501);
-        $org->getCreatedDate();
     }
 
     public static function initPAMIConn()
