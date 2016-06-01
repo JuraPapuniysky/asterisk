@@ -3,6 +3,8 @@ namespace frontend\controllers;
 
 
 
+use PAMI\Message\Action\MeetmeListAction;
+use PAMI\Message\Action\MeetmeMuteAction;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -84,6 +86,7 @@ class SiteController extends Controller
 
         return $this->render('index',[
             'module' => $users, //$aster->send(new CommandAction('module show')),
+            'message' => $users,
         ]);
     }
 
@@ -259,29 +262,48 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionMuteChannel($channel)
+    public function actionMute($usernumber)
     {
         $pami = \Yii::$app->pamiconn;
         $pami->init();
-        $pami->muteUser($pami->generalConference,$channel);
+        $message = $pami->muteUser($pami->generalConference,$usernumber);
         $users = $pami->getConferenceUsers($pami->generalConference);
         $pami->clientImpl->process();
         $pami->clientImpl->close();
         return $this->render('index',[
-            'module' => $users, //$aster->send(new CommandAction('module show')),
+            'module' => $users,
+            'message' => $message,
         ]);
     }
 
-    public function actionUnmuteChannel($channel)
+    public function actionUnmute($usernumber)
     {
         $pami = \Yii::$app->pamiconn;
         $pami->init();
-        $pami->unmuteUser($pami->generalConference,$channel);
+        $message = $pami->unmuteUser($pami->generalConference,$usernumber);
         $users = $pami->getConferenceUsers($pami->generalConference);
         $pami->clientImpl->process();
         $pami->clientImpl->close();
         return $this->render('index',[
-            'module' => $users, //$aster->send(new CommandAction('module show')),
+            'module' => $users,
+            'message' => $message,
+        ]);
+    }
+
+
+
+
+
+    public function actionTest()
+    {
+        $pami = \Yii::$app->pamiconn;
+        $pami->init();
+        $message = $pami->clientImpl->send(new MeetmeListAction(501));
+        $pami->clientImpl->process();
+        $pami->clientImpl->close();
+        return $this->render('test',[
+            'message' => $message,
+
         ]);
     }
 

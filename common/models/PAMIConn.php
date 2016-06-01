@@ -25,7 +25,7 @@ class PAMIConn extends Component
     ];
     public $clientImpl;
     public $generalConference;
-    
+
 
     /**
      * initialization of AMI connection
