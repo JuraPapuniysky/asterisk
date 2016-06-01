@@ -2,11 +2,7 @@
 namespace frontend\controllers;
 
 
-use PAMI\Message\Action\CommandAction;
-use PAMI\Message\Action\CoreShowChannelsAction;
-use PAMI\Message\Action\DAHDIDialOffHookAction;
-use PAMI\Message\Action\MeetmeListAction;
-use PAMI\Message\Action\MeetmeMuteAction;
+
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -19,7 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use PAMI\Message\Action\OriginateAction;
+
 
 /**
  * Site controller
@@ -80,9 +76,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $pami = Yii::$app->pamiconn;
+        $pami = \Yii::$app->pamiconn;
         $pami->init();
-        $pami->clientImpl;
         $users = $pami->getConferenceUsers($pami->generalConference);
         $pami->clientImpl->process();
         $pami->clientImpl->close();
@@ -263,4 +258,32 @@ class SiteController extends Controller
             'module' => $redir, //$aster->send(new CommandAction('module show')),
         ]);
     }
+
+    public function actionMuteChannel($channel)
+    {
+        $pami = \Yii::$app->pamiconn;
+        $pami->init();
+        $pami->muteUser($pami->generalConference,$channel);
+        $users = $pami->getConferenceUsers($pami->generalConference);
+        $pami->clientImpl->process();
+        $pami->clientImpl->close();
+        return $this->render('index',[
+            'module' => $users, //$aster->send(new CommandAction('module show')),
+        ]);
+    }
+
+    public function actionUnmuteChannel($channel)
+    {
+        $pami = \Yii::$app->pamiconn;
+        $pami->init();
+        $pami->unmuteUser($pami->generalConference,$channel);
+        $users = $pami->getConferenceUsers($pami->generalConference);
+        $pami->clientImpl->process();
+        $pami->clientImpl->close();
+        return $this->render('index',[
+            'module' => $users, //$aster->send(new CommandAction('module show')),
+        ]);
+    }
+
+
 }

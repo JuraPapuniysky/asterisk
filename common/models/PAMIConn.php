@@ -14,9 +14,18 @@ use yii\base\Component;
 
 class PAMIConn extends Component
 {
-    public $options;
+    public $options = [
+        'host' => '10.109.33.150',
+        'port' => '5038',
+        'username' => 'admin',
+        'secret' => 'admin',
+        'connect_timeout' => 5000,
+        'read_timeout' => 5000,
+        'scheme' => 'tcp://',// try tls://
+    ];
     public $clientImpl;
     public $generalConference;
+    
 
     /**
      * initialization of AMI connection
@@ -31,10 +40,13 @@ class PAMIConn extends Component
             $this->clientImpl->open();
 
 
+
         } catch (Exception $e) {
             echo $e->getMessage() . "\n";
         }
     }
+
+
 
     /**
      * Returnd information about connected users to conference $conference
