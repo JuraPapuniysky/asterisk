@@ -14,10 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>Please fill out the following fields to login:</p>
 
     <div class="row">
-        <div class="col-lg-5">
+
            <pre>
                <?php print_r($message) ?>
            </pre>
-        </div>
+
     </div>
 </div>

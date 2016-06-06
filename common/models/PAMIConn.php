@@ -5,11 +5,13 @@ namespace common\models;
 
 
 use PAMI\Client\Impl\ClientImpl;
+use PAMI\Message\Action\CommandAction;
 use PAMI\Message\Action\MeetmeListAction;
 use PAMI\Message\Action\MeetmeMuteAction;
 use PAMI\Message\Action\MeetmeUnmuteAction;
 use PAMI\Message\Action\OriginateAction;
 use yii\base\Component;
+use yii\web\NotFoundHttpException;
 
 
 class PAMIConn extends Component
@@ -31,7 +33,7 @@ class PAMIConn extends Component
      * initialization of AMI connection
      * @throws \PAMI\Client\Exception\ClientException
      */
-    public function init()
+    public function initAmi()
     {
         try {
 
@@ -42,8 +44,26 @@ class PAMIConn extends Component
 
 
         } catch (Exception $e) {
-            echo $e->getMessage() . "\n";
+            throw new NotFoundHttpException();
         }
+    }
+
+    public function closeAMI()
+    {
+        $this->clientImpl->process();
+        $this->clientImpl->close();
+    }
+
+    /**
+     * Executing command and return info.
+     * @param string $command command to executing
+     * @return mixed info
+     */
+    public function commandCLI($command)
+    {
+        $message = $this->clientImpl->send(new CommandAction($command));
+        usleep(1000);
+        return $message;
     }
 
 
@@ -57,7 +77,7 @@ class PAMIConn extends Component
     {
         $message = $this->clientImpl->send(new MeetmeListAction($conferese));
         usleep(1000);
-        return $message->getEvents();
+        return $message;
     }
 
     /**
@@ -68,7 +88,8 @@ class PAMIConn extends Component
     public function call($channel)
     {
         $originate = new OriginateAction($channel);
-        $originate->setContext('default');
+        $originate->setContext('from-internal');
+        $originate->setExtension($this->generalConference);
         $originate->setPriority(1);
         usleep(1000);
         return $this->clientImpl->send($originate);
@@ -98,6 +119,18 @@ class PAMIConn extends Component
     public function unmuteUser($conference, $user)
     {
         $message = $this->clientImpl->send(new MeetmeUnmuteAction($conference, $user));
+        usleep(1000);
+        return $message;
+    }
+
+    /**
+     * Realization of MeetmeList AMI action
+     * @param $conference
+     * @return mixed
+     */
+    public function meetMeList($conference)
+    {
+        $message = $this->clientImpl->send(new MeetmeListAction($conference));
         usleep(1000);
         return $message;
     }

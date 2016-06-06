@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 
 
+use common\models\ConfBridgeActions;
 use PAMI\Message\Action\MeetmeListAction;
 use PAMI\Message\Action\MeetmeMuteAction;
 use PAMI\Message\Action\RedirectAction;
@@ -79,14 +80,15 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $pami = \Yii::$app->pamiconn;
-        $pami->init();
-        $users = $pami->getConferenceUsers($pami->generalConference);
-        $pami->clientImpl->process();
-        $pami->clientImpl->close();
+        $pami->initAMI();
+        $confBridge = new ConfBridgeActions($pami->clientImpl);
+        $conferences = $confBridge->confBridgeList();
+        $confUsers = $confBridge->confBridgeConferenceList($conferences);
+        $pami->closeAMI();
 
         return $this->render('index',[
-            'module' => $users, //$aster->send(new CommandAction('module show')),
-            'message' => $users,
+           'conferences' => $confUsers,
+           
         ]);
     }
 
@@ -239,11 +241,7 @@ class SiteController extends Controller
             'module' =>$event , //$aster->send(new CommandAction('module show')),
         ]);
     }
-    
-    public function actionGetAsteriskCommands()
-    {
-        //TODO
-    }
+
 
     public function actionRedirect()
     {
@@ -298,10 +296,8 @@ class SiteController extends Controller
     {
         $pami = \Yii::$app->pamiconn;
         $pami->init();
-        $message = $pami->clientImpl->send(new MeetmeListAction(501));
-        $pami->clientImpl->process();
-        $pami->clientImpl->close();
-        return $this->render('test',[
+
+        return $this->render('test', [
             'message' => $message,
 
         ]);
