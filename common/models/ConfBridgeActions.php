@@ -44,11 +44,13 @@ class ConfBridgeActions extends Model
     {
         if(isset($conferences)) {
             foreach ($conferences as $conference) {
+
                 $message = $this->clientImpl->send(new CommandAction("confbridge list $conference"));
                 $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
                 array_pop($users);
+                $i = 0;
                 foreach ($this->strTok($users) as $user) {
-                    $i = 0;
+
                     $userArray[$i] = new ConferenceUser($conference, $user);
                     $i++;
                 }

@@ -5,6 +5,7 @@ namespace frontend\controllers;
 
 use common\models\Clients;
 use common\models\ConfBridgeActions;
+use PAMI\Message\Action\CommandAction;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -318,10 +319,11 @@ class SiteController extends Controller
         $confArray = [];
         $userArray = [];
         if(isset($confUsers)) {
+            $m = 0;
             foreach ($confUsers as $conference) {
-                $m = 0;
+                $i = 0;
                 foreach ($conference as $user) {
-                    $i = 0;
+
                     $client = self::findByCallerId($user->callerId);
                     $client->conference = $user->conference;
                     $client->channel = $user->channel;
@@ -343,7 +345,7 @@ class SiteController extends Controller
                         $i++;
                     }
                 }
-                $confArray[$i] = $userArray;
+                $confArray[$m] = $userArray;
             }
         }
         $pami->closeAMI();
@@ -351,18 +353,21 @@ class SiteController extends Controller
         return $confArray;
     }
 
-
+   
 
     public function actionTest()
     {
-        $pami = Yii::$app->pamiconn;
+        $pami = \Yii::$app->pamiconn;
         $pami->initAMI();
-        $confBridge = new ConfBridgeActions($pami->clientImpl);
-        $message = $confBridge->confBridgeMute(501,'SIP/112-00000003');
+        $message = $pami->clientImpl->send(new CommandAction("confbridge list 501"));
+        $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
+        array_pop($users);
+
+
 
 
         return $this->render('test', [
-            'message' => $message,
+            'message' => $users,
 
         ]);
     }

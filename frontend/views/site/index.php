@@ -68,12 +68,12 @@ $this->title = 'My Yii Application';
     </table>
     <?php Pjax::end(); ?>
     </div>
-
+    
 </div>
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 5000);
+    setInterval(function(){ $("#refreshButton").click(); }, 3000);
 });
 JS;
 $this->registerJs($script);
