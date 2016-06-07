@@ -14,15 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'channel')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'conference')->textInput() ?>
-
-    <?= $form->field($model, 'mutte')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'callerid')->textInput() ?>
 
-    <?= $form->field($model, 'video')->textInput(['maxlength' => true]) ?>
+    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

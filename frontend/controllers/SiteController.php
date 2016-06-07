@@ -5,8 +5,6 @@ namespace frontend\controllers;
 
 use common\models\Clients;
 use common\models\ConfBridgeActions;
-use PAMI\Message\Action\MeetmeListAction;
-use PAMI\Message\Action\MeetmeMuteAction;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -334,7 +332,13 @@ class SiteController extends Controller
                         $user->callerId = $client->callerid;
                         $user->mutted = $client->mutte;
                         $user->video = $client->video;
-
+                        if($client->mutte == 'yes')
+                        {
+                            $confBridge->confBridgeMute($client->conference, $client->channel);
+                        }else if($client->mutte == 'no')
+                        {
+                            $confBridge->confBridgeUnmute($client->conference, $client->channel);
+                        }
                         $userArray[$i] = $user;
                         $i++;
                     }

@@ -22,7 +22,9 @@ $this->title = 'My Yii Application';
          ['class' => 'btn btn-lg btn-primary', 'id' => 'refreshButton']
      ); ?>
 
-        <?php foreach ($conferences as $conference) { ?>
+        <?php foreach ($conferences as $conference) { $i = 0; $conf = $conference[$i];?>
+
+        <h3><span class="label label-info">Список учасников конференции <?= $conf->conference?></span></h3>
     <table class="table">
         <thead>
         <tr>
@@ -71,7 +73,7 @@ $this->title = 'My Yii Application';
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 3000);
+    setInterval(function(){ $("#refreshButton").click(); }, 5000);
 });
 JS;
 $this->registerJs($script);
