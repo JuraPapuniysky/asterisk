@@ -26,6 +26,8 @@ use frontend\models\ContactForm;
  */
 class SiteController extends Controller
 {
+
+
     /**
      * @inheritdoc
      */
@@ -80,38 +82,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $pami = \Yii::$app->pamiconn;
-        $pami->initAMI();
-        $confBridge = new ConfBridgeActions($pami->clientImpl);
-        $conferences = $confBridge->confBridgeList();
-        $confUsers = $confBridge->confBridgeConferenceList($conferences);
-        $confArray = [];
-        $userArray = [];
-        foreach ($confUsers as $conference)
-        {
-            $m = 0;
-            foreach ($conference as $user)
-            {
-                $i = 0;
-                $client = self::findByCallerId($user->callerId);
-                $client->conference = $user->conference;
-                $client->channel = $user->channel;
-                if($client->save()){
-                    $user->name = $client->name;
-                    $user->conference = $client->conference;
-                    $user->channel = $client->channel;
-                    $user->callerId = $client->callerid;
-                    $user->mutted = $client->mutte;
-                    $user->video = $client->video;
-
-                    $userArray[$i] = $user;
-                    $i++;
-                }
-            }
-            $confArray[$i] = $userArray;
-        }
-        
-        $pami->closeAMI();
+        $confArray = $this->viewUsers();
             
         return $this->render('index',[
            'conferences' => $confArray,
@@ -286,31 +257,37 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionMute($usernumber)
+    public function actionMute($conference, $channel)
     {
-        $pami = \Yii::$app->pamiconn;
-        $pami->init();
-        $message = $pami->muteUser($pami->generalConference,$usernumber);
-        $users = $pami->getConferenceUsers($pami->generalConference);
-        $pami->clientImpl->process();
-        $pami->clientImpl->close();
-        return $this->render('index',[
-            'module' => $users,
-            'message' => $message,
+        $client = self::findByChannel($channel);
+        $client->mutte = 'yes';
+        if($client->save()){
+            $pami = Yii::$app->pamiconn;
+            $pami->initAMI();
+            $confBridge = new ConfBridgeActions($pami->clientImpl);
+            $confBridge->confBridgeMute($conference, $channel);
+        }
+        $confArray = $this->viewUsers();
+
+        return $this->render('index', [
+            'conferences' => $confArray,
         ]);
     }
 
-    public function actionUnmute($usernumber)
+    public function actionUnmute($conference, $channel)
     {
-        $pami = \Yii::$app->pamiconn;
-        $pami->init();
-        $message = $pami->unmuteUser($pami->generalConference,$usernumber);
-        $users = $pami->getConferenceUsers($pami->generalConference);
-        $pami->clientImpl->process();
-        $pami->clientImpl->close();
-        return $this->render('index',[
-            'module' => $users,
-            'message' => $message,
+        $client = self::findByChannel($channel);
+        $client->mutte = 'no';
+        if($client->save()){
+            $pami = Yii::$app->pamiconn;
+            $pami->initAMI();
+            $confBridge = new ConfBridgeActions($pami->clientImpl);
+            $confBridge->confBridgeMute($conference, $channel);
+        }
+        $confArray = $this->viewUsers();
+
+        return $this->render('index', [
+            'conferences' => $confArray,
         ]);
     }
 
@@ -323,13 +300,62 @@ class SiteController extends Controller
         }
     }
 
+    protected static function findByChannel($channel)
+    {
+        if (($model = Clients::findOne(['channel' => $channel,])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 
+    protected function viewUsers()
+    {
+
+        $pami = \Yii::$app->pamiconn;
+        $pami->initAMI();
+        $confBridge = new ConfBridgeActions($pami->clientImpl);
+        $conferences = $confBridge->confBridgeList();
+        $confUsers = $confBridge->confBridgeConferenceList($conferences);
+        $confArray = [];
+        $userArray = [];
+        if(isset($confUsers)) {
+            foreach ($confUsers as $conference) {
+                $m = 0;
+                foreach ($conference as $user) {
+                    $i = 0;
+                    $client = self::findByCallerId($user->callerId);
+                    $client->conference = $user->conference;
+                    $client->channel = $user->channel;
+                    if ($client->save()) {
+                        $user->name = $client->name;
+                        $user->conference = $client->conference;
+                        $user->channel = $client->channel;
+                        $user->callerId = $client->callerid;
+                        $user->mutted = $client->mutte;
+                        $user->video = $client->video;
+
+                        $userArray[$i] = $user;
+                        $i++;
+                    }
+                }
+                $confArray[$i] = $userArray;
+            }
+        }
+        $pami->closeAMI();
+
+        return $confArray;
+    }
 
 
 
     public function actionTest()
     {
-        $message = self::findByCallerId(112);
+        $pami = Yii::$app->pamiconn;
+        $pami->initAMI();
+        $confBridge = new ConfBridgeActions($pami->clientImpl);
+        $message = $confBridge->confBridgeMute(501,'SIP/112-00000003');
+
 
         return $this->render('test', [
             'message' => $message,

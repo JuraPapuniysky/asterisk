@@ -42,19 +42,20 @@ class ConfBridgeActions extends Model
      */
     public function confBridgeConferenceList($conferences)
     {
-        foreach ($conferences as $conference) {
-            $message = $this->clientImpl->send(new CommandAction("confbridge list $conference"));
-            $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
-            array_pop($users);
-            foreach ($this->strTok($users) as $user)
-            {
-                $i = 0;
-                $userArray[$i] = new ConferenceUser($conference, $user);
-                $i++;
+        if(isset($conferences)) {
+            foreach ($conferences as $conference) {
+                $message = $this->clientImpl->send(new CommandAction("confbridge list $conference"));
+                $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
+                array_pop($users);
+                foreach ($this->strTok($users) as $user) {
+                    $i = 0;
+                    $userArray[$i] = new ConferenceUser($conference, $user);
+                    $i++;
+                }
+                $conferenceList = [$conference => $userArray];
             }
-            $conferenceList = [$conference => $userArray];
+            return $conferenceList;
         }
-        return $conferenceList;
     }
 
     /**

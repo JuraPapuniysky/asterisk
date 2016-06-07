@@ -48,13 +48,13 @@ $this->title = 'My Yii Application';
                     {
                         echo Html::a(
                             'Выключить микрофон',
-                            ['/site/mute/', 'channel' => $user->channel ],
+                            ['/site/mute/', 'conference' => $user->conference, 'channel' => $user->channel ],
                             ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']
                         );
                     }else if($user->mutted == 'yes'){
                         echo Html::a(
                             'Включить микрофон',
-                            ['/site/unmute/', 'channel' => $user->channel ],
+                            ['/site/unmute/', 'conference' => $user->conference, 'channel' => $user->channel ],
                             ['class' => 'btn btn-lg btn-danger', 'id' => 'unmuted_user']
                         );
                     }?></td>
@@ -71,7 +71,7 @@ $this->title = 'My Yii Application';
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 10000);
+    setInterval(function(){ $("#refreshButton").click(); }, 3000);
 });
 JS;
 $this->registerJs($script);
