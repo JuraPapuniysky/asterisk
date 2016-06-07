@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 
 
+use common\models\Clients;
 use common\models\ConfBridgeActions;
 use PAMI\Message\Action\MeetmeListAction;
 use PAMI\Message\Action\MeetmeMuteAction;
@@ -84,11 +85,36 @@ class SiteController extends Controller
         $confBridge = new ConfBridgeActions($pami->clientImpl);
         $conferences = $confBridge->confBridgeList();
         $confUsers = $confBridge->confBridgeConferenceList($conferences);
-        $pami->closeAMI();
+        $confArray = [];
+        $userArray = [];
+        foreach ($confUsers as $conference)
+        {
+            $m = 0;
+            foreach ($conference as $user)
+            {
+                $i = 0;
+                $client = self::findByCallerId($user->callerId);
+                $client->conference = $user->conference;
+                $client->channel = $user->channel;
+                if($client->save()){
+                    $user->name = $client->name;
+                    $user->conference = $client->conference;
+                    $user->channel = $client->channel;
+                    $user->callerId = $client->callerid;
+                    $user->mutted = $client->mutte;
+                    $user->video = $client->video;
 
+                    $userArray[$i] = $user;
+                    $i++;
+                }
+            }
+            $confArray[$i] = $userArray;
+        }
+        
+        $pami->closeAMI();
+            
         return $this->render('index',[
-           'conferences' => $confUsers,
-           
+           'conferences' => $confArray,
         ]);
     }
 
@@ -288,14 +314,22 @@ class SiteController extends Controller
         ]);
     }
 
+    protected static function findByCallerId($callerId)
+    {
+        if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
 
 
 
 
     public function actionTest()
     {
-        $pami = \Yii::$app->pamiconn;
-        $pami->init();
+        $message = self::findByCallerId(112);
 
         return $this->render('test', [
             'message' => $message,

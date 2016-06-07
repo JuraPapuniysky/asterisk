@@ -27,6 +27,7 @@ $this->title = 'My Yii Application';
         <thead>
         <tr>
             <th>Номер конференции</th>
+            <th>Имя пользователя</th>
             <th>Номер пользователя</th>
             <th>Канал</th>
             <th>Приглушен</th>
@@ -38,30 +39,23 @@ $this->title = 'My Yii Application';
             <?php foreach ($conference as $user){ ?>
             <tr>
                 <td><?= $user->conference ?></td>
+                <td><?= $user->name ?></td>
                 <td><?= $user->callerId ?></td>
                 <td><?= $user->channel ?></td>
-                <td><?php if($user->mutted == false){
-                        echo 'No';
-                    }else{
-                        echo 'Yes';
-                    } ?></td>
-                <td><?php if($user->video == false){
-                        echo 'No';
-                    }else{
-                        echo 'Yes';
-                    } ?></td>
-                <td><?php if($user->mutted == false)
+                <td><?= $user->mutted ?></td>
+                <td><?= $user->video ?></td>
+                <td><?php if($user->mutted == 'no')
                     {
                         echo Html::a(
                             'Выключить микрофон',
                             ['/site/mute/', 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
+                            ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']
                         );
-                    }else{
+                    }else if($user->mutted == 'yes'){
                         echo Html::a(
                             'Включить микрофон',
                             ['/site/unmute/', 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-success', 'id' => 'unmuted_user']
+                            ['class' => 'btn btn-lg btn-danger', 'id' => 'unmuted_user']
                         );
                     }?></td>
             </tr>
@@ -72,6 +66,7 @@ $this->title = 'My Yii Application';
     </table>
     <?php Pjax::end(); ?>
     </div>
+
 </div>
 <?php
 $script = <<< JS

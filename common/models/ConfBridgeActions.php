@@ -129,6 +129,12 @@ class ConfBridgeActions extends Model
         return $message;
     }
 
+    public function getCallerId($channel)
+    {
+        list($num, $else) = explode('-', preg_replace("#[^0-9\-]*#is", "", $channel), 2);
+        return $num;
+    }
+
 
     public function unsetElems($array, $count)
     {
@@ -145,10 +151,12 @@ class ConfBridgeActions extends Model
         foreach ($array as $arr)
         {
            $tok = strtok($arr, ' ');
-           $srt_arr[$i] = $tok;
+           $str_arr[$i] = $tok;
            $i++;
         }
-        return $srt_arr;
+        if(isset($str_arr)) {
+            return $str_arr;
+        }
     }
 
 }

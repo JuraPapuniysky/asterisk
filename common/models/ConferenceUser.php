@@ -13,6 +13,8 @@ class ConferenceUser extends Model
 
     public $conference;
 
+    public $name;
+
     public $channel;
 
     public $callerId;
