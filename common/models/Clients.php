@@ -17,6 +17,9 @@ use Yii;
  */
 class Clients extends \yii\db\ActiveRecord
 {
+
+    public $isCall;
+
     /**
      * @inheritdoc
      */

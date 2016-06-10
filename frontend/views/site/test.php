@@ -4,6 +4,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 $this->title = 'test';
 $this->params['breadcrumbs'][] = $this->title;
@@ -13,11 +14,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>Please fill out the following fields to login:</p>
 
-    <div class="row">
+    <?php
+    echo Html::a(
+    "Звонить",
+    ['/site/call/', 'conference' => 501, 'callerid' => '111'],
+    ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
+    );
 
-           <pre>
-               <?php print_r($message) ?>
-           </pre>
+    ?>
 
-    </div>
 </div>

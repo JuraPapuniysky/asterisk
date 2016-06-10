@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 
-$this->title = 'My Yii Application';
+$this->title = 'Актиные конференции';
 
 ?>
 
@@ -25,7 +25,21 @@ $this->title = 'My Yii Application';
         <?php foreach ($conferences as $conference) { $i = 0; $conf = $conference[$i];?>
 
         <h3><span class="label label-info">Список учасников конференции <?= $conf->conference?></span></h3>
-    <table class="table">
+            <?php
+            echo Html::a(
+                "Выключить все микрофоны $conf->conference",
+                ['/site/mutte-unmutte-all/', 'conference' => $conf->conference, 'action' => 'yes'],
+                ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
+            );
+
+            echo Html::a(
+                "Включить все микрофоны $conf->conference",
+                ['/site/mutte-unmutte-all/', 'conference' => $conf->conference, 'action' => 'no' ],
+                ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']
+            );
+
+            ?>
+    <table class="table table-hover table-bordered">
         <thead>
         <tr>
             <th>Номер конференции</th>
@@ -38,7 +52,7 @@ $this->title = 'My Yii Application';
         </tr>
         </thead>
         <tbody>
-            <?php foreach ($conference as $user){ ?>
+            <?php $i++; foreach ($conference as $user){ ?>
             <tr>
                 <td><?= $user->conference ?></td>
                 <td><?= $user->name ?></td>
@@ -50,31 +64,32 @@ $this->title = 'My Yii Application';
                     {
                         echo Html::a(
                             'Выключить микрофон',
-                            ['/site/mute/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']
+                            ['/site/mutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
+                            ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
                         );
                     }else if($user->mutted == 'yes'){
                         echo Html::a(
                             'Включить микрофон',
-                            ['/site/unmute/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-danger', 'id' => 'unmuted_user']
+                            ['/site/unmutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
+                            ['class' => 'btn btn-lg btn-success', 'id' => 'unmuted_user']
                         );
                     }?></td>
             </tr>
             <?php } ?>
         </tbody>
-
-    <?php } ?>
     </table>
+    <?php } ?>
+
     <?php Pjax::end(); ?>
     </div>
-    
+
 </div>
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 3000);
+    setInterval(function(){ $("#refreshButton").click(); }, 10000);
 });
 JS;
 $this->registerJs($script);
 ?>
+

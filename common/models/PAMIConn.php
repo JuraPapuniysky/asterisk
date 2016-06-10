@@ -16,15 +16,7 @@ use yii\web\NotFoundHttpException;
 
 class PAMIConn extends Component
 {
-    public $options = [
-        'host' => '10.109.33.150',
-        'port' => '5038',
-        'username' => 'admin',
-        'secret' => 'admin',
-        'connect_timeout' => 5000,
-        'read_timeout' => 5000,
-        'scheme' => 'tcp://',// try tls://
-    ];
+    public $options;
     public $clientImpl;
     public $generalConference;
 
@@ -85,11 +77,11 @@ class PAMIConn extends Component
      * @param $channel
      * @return mixed
      */
-    public function call($channel)
+    public function call($conference, $channel)
     {
         $originate = new OriginateAction($channel);
-        $originate->setContext('from-internal');
-        $originate->setExtension($this->generalConference);
+        $originate->setContext('dialout');
+        $originate->setExtension($conference);
         $originate->setPriority(1);
         usleep(1000);
         return $this->clientImpl->send($originate);

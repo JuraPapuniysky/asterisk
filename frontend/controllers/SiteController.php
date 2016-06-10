@@ -224,17 +224,18 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionCall()
+    public function actionCall($conference, $callerid)
     {
         $pami = Yii::$app->pamiconn;
-        $pami->init();
+        $pami->initAMI();
 
-        $event = $pami->call('SIP/112');
+        $pami->call($conference, "SIP/$callerid");
         usleep(1000);
-        $pami->clientImpl->process();
-        $pami->clientImpl->close();
+
+        $confArray = $this->viewUsers();
+
         return $this->render('index',[
-            'module' =>$event , //$aster->send(new CommandAction('module show')),
+            'conferences' => $confArray,
         ]);
     }
 
@@ -252,11 +253,11 @@ class SiteController extends Controller
         $aster->process();
         $aster->close();
         return $this->render('index',[
-            'module' => $redir, //$aster->send(new CommandAction('module show')),
+            'module' => $redir,
         ]);
     }
 
-    public function actionMute($conference, $channel)
+    public function actionMutte($conference, $channel)
     {
         $client = self::findByChannel($channel);
         $client->mutte = 'yes';
@@ -273,7 +274,7 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionUnmute($conference, $channel)
+    public function actionUnmutte($conference, $channel)
     {
         $client = self::findByChannel($channel);
         $client->mutte = 'no';
@@ -288,6 +289,31 @@ class SiteController extends Controller
         return $this->render('index', [
             'conferences' => $confArray,
         ]);
+    }
+    
+    public function actionCatalog()
+    {
+        $model = new Clients();
+
+        return $this->render('catalog', [
+            'model' => $model->find()->all(),
+        ]);
+    }
+
+    public function actionMutteUnmutteAll($conference, $action)
+    {
+        $confArray = $this->viewUsers();
+        foreach ($confArray as $conf)
+        {
+            foreach ($conf as $user) {
+                if($user->conference == $conference) {
+                    $model = $this->findByCallerId($user->callerId);
+                    $model->mutte = $action;
+                    $model->save();
+                }
+            }
+        }
+        $this->actionIndex();
     }
 
     protected static function findByCallerId($callerId)
@@ -340,6 +366,8 @@ class SiteController extends Controller
                         }else if($client->mutte == 'no')
                         {
                             $confBridge->confBridgeUnmute($client->conference, $client->channel);
+                        }else{
+                            $confBridge->confBridgeMute($client->conference, $client->channel);
                         }
                         $userArray[$i] = $user;
                         $i++;
@@ -359,16 +387,11 @@ class SiteController extends Controller
     {
         $pami = \Yii::$app->pamiconn;
         $pami->initAMI();
-        $message = $pami->clientImpl->send(new CommandAction("confbridge list 501"));
-        $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
-        array_pop($users);
-
-
-
-
+        $confBridge = new ConfBridgeActions($pami->clientImpl);
+        $conferences = $confBridge->confBridgeList();
+        $confUsers = $confBridge->confBridgeConferenceList($conferences);
         return $this->render('test', [
-            'message' => $users,
-
+            'model' => $confUsers,
         ]);
     }
 

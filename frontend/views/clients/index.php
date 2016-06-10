@@ -33,6 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
             //'video',
 
             ['class' => 'yii\grid\ActionColumn'],
+
         ],
     ]); ?>
+
+    <pre>
+        <?php print_r($searchModel);?>
+    </pre>
 </div>
