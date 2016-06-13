@@ -239,6 +239,20 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * @param $conference
+     * @param $callerids
+     */
+    public function actionCallChecked($conference, $callerids)
+    {
+        $pami = Yii::$app->pamiconn;
+        $pami->initAMI();
+        $pami->callChecked($conference, $callerids);
+        $pami->closeAMI();
+
+        $this->actionIndex();
+    }
+
 
     public function actionRedirect()
     {
@@ -383,15 +397,14 @@ class SiteController extends Controller
 
    
 
-    public function actionTest()
+    public function actionTest($conference, $callerids)
     {
-        $pami = \Yii::$app->pamiconn;
-        $pami->initAMI();
-        $confBridge = new ConfBridgeActions($pami->clientImpl);
-        $conferences = $confBridge->confBridgeList();
-        $confUsers = $confBridge->confBridgeConferenceList($conferences);
+        $callerids = explode(',',$callerids);
+        array_pop($callerids);
+
         return $this->render('test', [
-            'model' => $confUsers,
+            'conference' => $conference,
+            'callerids' => $callerids,
         ]);
     }
 

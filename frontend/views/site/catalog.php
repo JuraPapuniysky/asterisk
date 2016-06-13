@@ -57,8 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
     <?php echo Html::a(
         "Вызов выбраных",
-        ['/site/call/', 'conference' => 501, 'callerid' => $user->callerid],
-        ['class' => 'btn btn-lg btn-success pull-right', 'id' => 'callAll-button']
+        ['/site/call-checked/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerids' => ""],
+        ['class' => 'btn btn-lg btn-success pull-right', 'id' => 'call-all-button']
     );?>
 
 </div>
@@ -66,8 +66,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
     var elemsId = <?php echo $i-1; ?>;
     var chekedUser = '';
+    var callButtonHref = document.getElementById('call-all-button').href;
 function checkAll(source)
 {
+
     tmp = '';
     chekedUser = '';
     for(i=0;i<elemsId;i++)
@@ -80,7 +82,8 @@ function checkAll(source)
     if(!source.checked) {
         chekedUser = '';
     }
-    alert(chekedUser);
+    document.getElementById('call-all-button').href = callButtonHref + chekedUser
+
 }
 
 function do_one(source)
@@ -91,14 +94,15 @@ function do_one(source)
         if(chekedUser.indexOf(source.value)+1)
         {
             chekedUser = chekedUser.replace(source.value+',', '');
-            alert(chekedUser);
+            document.getElementById('call-all-button').href = callButtonHref + chekedUser;
         }
 
     }
     else
     {
+
         chekedUser = chekedUser+source.value+',';
-        alert(chekedUser);
+        document.getElementById('call-all-button').href = callButtonHref + chekedUser;
         set_checked=true;
         for(i=0;i<elemsId;i++)
 		{

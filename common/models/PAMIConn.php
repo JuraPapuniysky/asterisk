@@ -89,6 +89,21 @@ class PAMIConn extends Component
     }
 
     /**
+     * Call to checked users.
+     * @param int $conference  conference.
+     * @param string $callerids checkd users.
+     */
+    public function callCheckd($conference, $callerids)
+    {
+        $callerids = explode(',',$callerids);
+        array_pop($callerids);
+        foreach ($callerids as $callerid)
+        {
+            $this->call($conference, "SIP/$callerid");
+        }
+    }
+
+    /**
      * Realization of MeetmeMute asterisk action
      * @param $conference
      * @param $user

@@ -131,6 +131,8 @@ class ConfBridgeActions extends Model
         $message = $this->clientImpl->send(new CommandAction("confbridge record stop $conference"));
         return $message;
     }
+    
+    
 
     public function getCallerId($channel)
     {
