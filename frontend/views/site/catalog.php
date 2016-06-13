@@ -65,13 +65,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script type="text/javascript">
     var elemsId = <?php echo $i-1; ?>;
+    var chekedUser = '';
 function checkAll(source)
 {
-
+    tmp = '';
+    chekedUser = '';
     for(i=0;i<elemsId;i++)
     {
-      document.getElementById(i).checked=source.checked;
+        document.getElementById(i).checked = source.checked;
+        tmp = document.getElementById(i).value;
+        chekedUser = chekedUser + tmp + ',';
     }
+
+    if(!source.checked) {
+        chekedUser = '';
+    }
+    alert(chekedUser);
 }
 
 function do_one(source)
@@ -79,9 +88,28 @@ function do_one(source)
     if(!source.checked)
     {
         document.getElementById('all').checked=false;
+        if(chekedUser.indexOf(source.value)+1)
+        {
+            chekedUser = chekedUser.replace(source.value+',', '');
+            alert(chekedUser);
+        }else{
+            chekedUser = chekedUser+source.value+',';
+            alert(chekedUser);
+        }
+
     }
     else
     {
+        if(checkUser.indexOf(source.value)+1)
+        {
+            chekedUser = chekedUser.replace(source.value+',', '');
+            alert(chekedUser);
+
+        }else{
+            chekedUser = chekedUser+source.value+',';
+            alert(chekedUser);
+        }
+
         set_checked=true;
         for(i=0;i<elemsId;i++)
 		{
