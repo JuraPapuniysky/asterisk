@@ -92,24 +92,13 @@ function do_one(source)
         {
             chekedUser = chekedUser.replace(source.value+',', '');
             alert(chekedUser);
-        }else{
-            chekedUser = chekedUser+source.value+',';
-            alert(chekedUser);
         }
 
     }
     else
     {
-        if(checkUser.indexOf(source.value)+1)
-        {
-            chekedUser = chekedUser.replace(source.value+',', '');
-            alert(chekedUser);
-
-        }else{
-            chekedUser = chekedUser+source.value+',';
-            alert(chekedUser);
-        }
-
+        chekedUser = chekedUser+source.value+',';
+        alert(chekedUser);
         set_checked=true;
         for(i=0;i<elemsId;i++)
 		{
