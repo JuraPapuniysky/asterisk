@@ -93,7 +93,7 @@ class PAMIConn extends Component
      * @param int $conference  conference.
      * @param string $callerids checkd users.
      */
-    public function callCheckd($conference, $callerids)
+    public function callChecked($conference, $callerids)
     {
         $callerids = explode(',',$callerids);
         array_pop($callerids);

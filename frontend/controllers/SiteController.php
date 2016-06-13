@@ -35,15 +35,12 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['login', 'error'],
                         'allow' => true,
-                        'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -250,7 +247,13 @@ class SiteController extends Controller
         $pami->callChecked($conference, $callerids);
         $pami->closeAMI();
 
-        $this->actionIndex();
+        $confArray = $this->viewUsers();
+
+        return $this->render('index',[
+            'conferences' => $confArray,
+        ]);
+
+
     }
 
 
