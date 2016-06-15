@@ -333,7 +333,7 @@ class SiteController extends Controller
         $this->actionIndex();
     }
 
-    public function setSingleVideo($conference, $channel)
+    public function actionSetSingleVideo($conference, $channel)
     {
         Yii::$app->pamiconn->setSingleVideo($conference, $channel);
         $confArray = $this->viewUsers();
