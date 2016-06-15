@@ -4,6 +4,7 @@
 namespace common\models;
 
 
+use common\amiactions\ConfbridgeSetSingleVideoSrc;
 use PAMI\Client\Impl\ClientImpl;
 use PAMI\Message\Action\CommandAction;
 use PAMI\Message\Action\MeetmeListAction;
@@ -40,6 +41,9 @@ class PAMIConn extends Component
         }
     }
 
+    /**
+     * Close AMI connection
+     */
     public function closeAMI()
     {
         $this->clientImpl->process();
@@ -73,7 +77,7 @@ class PAMIConn extends Component
     }
 
     /**
-     * Create the call from asterisk yo user $chanell
+     * Create the call from asterisk yo user $chanell.
      * @param $channel
      * @return mixed
      */
@@ -104,7 +108,7 @@ class PAMIConn extends Component
     }
 
     /**
-     * Realization of MeetmeMute asterisk action
+     * Realization of MeetmeMute asterisk action.
      * @param $conference
      * @param $user
      * @return mixed
@@ -118,7 +122,7 @@ class PAMIConn extends Component
     }
 
     /**
-     * Realization of MeetmeUnmute asterisk action
+     * Realization of MeetmeUnmute asterisk action.
      * @param $conference
      * @param $user
      * @return mixed
@@ -131,7 +135,7 @@ class PAMIConn extends Component
     }
 
     /**
-     * Realization of MeetmeList AMI action
+     * Realization of MeetmeList AMI action.
      * @param $conference
      * @return mixed
      */
@@ -139,6 +143,19 @@ class PAMIConn extends Component
     {
         $message = $this->clientImpl->send(new MeetmeListAction($conference));
         usleep(1000);
+        return $message;
+    }
+
+    /**
+     * Realization of ConfbridgeSetSingleVideoSrc AMI action.
+     * @param $conference
+     * @param $channel
+     * @return mixed
+     */
+    public function setSingleVideo($conference, $channel)
+    {
+        $message = $this->clientImpl->send(new ConfbridgeSetSingleVideoSrc($conference, $channel));
+        uslepp(1000);
         return $message;
     }
 

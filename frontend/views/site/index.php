@@ -15,14 +15,20 @@ $this->title = 'Актиные конференции';
 
 
     <div class="body-content">
-    <?php Pjax::begin();
-     echo Html::a(
-         'Обновить',
-         ['/site/index/'],
-         ['class' => 'btn btn-lg btn-primary', 'id' => 'refreshButton']
-     ); ?>
+    <?php Pjax::begin();?>
 
-        <?php foreach ($conferences as $conference) { $i = 0; $conf = $conference[$i];?>
+        <?php echo Html::a(
+         '',
+         ['/site/index/'],
+         ['class' => 'glyphicon glyphicon-refresh', 'id' => 'refreshButton']
+     );
+        if($conferences == null)
+        {?>
+             <h3><span class="label label-info">Нет активных конференций</span></h3>
+
+        <?php }?>
+
+        <?php foreach  ($conferences as $conference) { $i = 0; $conf = $conference[$i];?>
 
         <h3><span class="label label-info">Список учасников конференции <?= $conf->conference?></span></h3>
             <?php
@@ -74,6 +80,10 @@ $this->title = 'Актиные конференции';
                             ['class' => 'btn btn-lg btn-success', 'id' => 'unmuted_user']
                         );
                     }?></td>
+                <td><?= Html::a(
+                        'Отобразить всем',
+                        ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
+                        ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']) ?></td>
             </tr>
             <?php } ?>
         </tbody>

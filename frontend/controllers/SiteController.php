@@ -333,6 +333,16 @@ class SiteController extends Controller
         $this->actionIndex();
     }
 
+    public function setSingleVideo($conference, $channel)
+    {
+        Yii::$app->pamiconn->setSingleVideo($conference, $channel);
+        $confArray = $this->viewUsers();
+
+        return $this->render('index', [
+            'conferences' => $confArray,
+        ]);
+    }
+
     protected static function findByCallerId($callerId)
     {
         if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
