@@ -8,6 +8,7 @@ use common\models\ClientsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * ClientsController implements the CRUD actions for Clients model.

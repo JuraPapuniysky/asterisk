@@ -5,7 +5,6 @@ namespace frontend\controllers;
 
 use common\models\Clients;
 use common\models\ConfBridgeActions;
-use PAMI\Message\Action\CommandAction;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
