@@ -342,12 +342,12 @@ class SiteController extends Controller
         ]);
     }
 
-    protected static function findByCallerId($callerId)
+    protected function findByCallerId($callerId, $user = null)
     {
         if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+           return false;
         }
     }
 
@@ -376,9 +376,16 @@ class SiteController extends Controller
                 $i = 0;
                 foreach ($conference as $user) {
 
-                    $client = self::findByCallerId($user->callerId);
-                    $client->conference = $user->conference;
-                    $client->channel = $user->channel;
+                    if(!$client = $this->findByCallerId($user->callerId)) {
+                        $client = new Clients();
+                        $client->name = 'unknown';
+                        $client->callerid = $user->callerId;
+                        $client->conference = $user->conference;
+                        $client->channel = $user->channel;
+                    }else{
+                        $client->conference = $user->conference;
+                        $client->channel = $user->channel;
+                    }
                     if ($client->save()) {
                         $user->name = $client->name;
                         $user->conference = $client->conference;
