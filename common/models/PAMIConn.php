@@ -20,6 +20,7 @@ class PAMIConn extends Component
     public $options;
     public $clientImpl;
     public $generalConference;
+    public $context;
 
 
     /**
@@ -84,7 +85,7 @@ class PAMIConn extends Component
     public function call($conference, $channel)
     {
         $originate = new OriginateAction($channel);
-        $originate->setContext('dialout');
+        $originate->setContext($this->context);
         $originate->setExtension($conference);
         $originate->setPriority(1);
         usleep(1000);

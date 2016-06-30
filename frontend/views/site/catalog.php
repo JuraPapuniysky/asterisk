@@ -19,9 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Добавить пользователя', ['clients/create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <table class="table table-hover table-bordered">
+    <table class="table table table-condensed table-bordered">
         <thead>
         <tr>
+            <th></th>
             <th>№</th>
             <th>Имя пользователя</th>
             <th>Номер пользователя</th>
@@ -37,12 +38,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <tbody>
         <?php $i = 1; foreach ($model as $user){ ?>
             <tr>
+                <td><?php echo Html::a(
+                            "<span class=\"glyphicon glyphicon-trash\">",
+                            ['/clients/delete/', 'id' => $user->id],
+                            ['id' => 'call-button', 'data-confirm' => "Вы уверены, что хотите удалить пользователя $user->name из справочника?"]
+                        );?>
+                    <?php echo Html::a(
+                        "<span class=\"glyphicon glyphicon-pencil\">",
+                        ['/clients/update/', 'id' => $user->id],
+                        ['id' => 'call-button']
+                    );?></td>
                 <td><?= $i ?></td>
                 <td><?= $user->name ?></td>
                 <td><?= $user->callerid ?></td>
                 <td><?php echo Html::a(
                         "Вызов",
-                        ['/site/call/', 'conference' => 501, 'callerid' => $user->callerid],
+                        ['/site/call/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerid' => $user->callerid],
                         ['class' => 'btn btn-lg btn-success', 'id' => 'call-button']
                     );?></td>
                 <td><?= Html::checkbox('call',$checked = false, [

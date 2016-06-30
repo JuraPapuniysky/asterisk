@@ -10,6 +10,7 @@ use yii\base\Model;
 
 class ConferenceUser extends Model
 {
+    public $id;
 
     public $conference;
 

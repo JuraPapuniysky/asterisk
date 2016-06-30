@@ -342,6 +342,20 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionKick($conference, $channel)
+    {
+        $pami = Yii::$app->pamiconn;
+        $pami->initAMI();
+        $conf = new ConfBridgeActions($pami->clientImpl);
+        $conf->confBridgeKick($conference, $channel);
+        
+        $confArray = $this->viewUsers();
+
+        return $this->render('index',[
+            'conferences' => $confArray,
+        ]);
+    }
+
     protected function findByCallerId($callerId, $user = null)
     {
         if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
@@ -387,6 +401,7 @@ class SiteController extends Controller
                         $client->channel = $user->channel;
                     }
                     if ($client->save()) {
+                        $user->id = $client->id;
                         $user->name = $client->name;
                         $user->conference = $client->conference;
                         $user->channel = $client->channel;
@@ -416,14 +431,15 @@ class SiteController extends Controller
 
    
 
-    public function actionTest($conference, $callerids)
+    public function actionTest()
     {
-        $callerids = explode(',',$callerids);
-        array_pop($callerids);
+        $pami = Yii::$app->pamiconn;
+        $pami->initAMI();
+        $conf = new ConfBridgeActions($pami->clientImpl);
+        $info = $conf->confBridgeList();
 
         return $this->render('test', [
-            'conference' => $conference,
-            'callerids' => $callerids,
+            'info' => $info,
         ]);
     }
 

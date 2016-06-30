@@ -45,43 +45,46 @@ $this->title = 'Актиные конференции';
             );
 
             ?>
-    <table class="table table-hover table-bordered">
+
+    <div class="row">
+
+    <table class="table table table-condensed table-hover table-bordered">
         <thead>
         <tr>
-            <th>Номер конференции</th>
-            <th>Имя пользователя</th>
-            <th>Номер пользователя</th>
-            <th>Канал</th>
-            <th>Приглушен</th>
-            <th>Видео</th>
+            <th></th>
+            <th>№ конф</th>
+            <th>Имя</th>
+            <th>Номер</th>
             <th>Управление</th>
         </tr>
         </thead>
         <tbody>
             <?php $i++; foreach ($conference as $user){ ?>
             <tr>
+                <td><?= Html::a(
+                        "<span class=\"glyphicon glyphicon-remove\">",
+                        ['/site/kick/', 'conference' => $user->conference, 'channel' => $user->channel ],
+                        ['class' => '', 'data-confirm' => "Вы уверены, что хотите удалить пользователя $user->name из конференции?"]
+                    ) ?></td>
                 <td><?= $user->conference ?></td>
                 <td><?= $user->name ?></td>
                 <td><?= $user->callerId ?></td>
-                <td><?= $user->channel ?></td>
-                <td><?= $user->mutted ?></td>
-                <td><?= $user->video ?></td>
                 <td><?php if($user->mutted == 'no')
                     {
                         echo Html::a(
-                            'Выключить микрофон',
+                            '<small>Выключить микрофон</small>',
                             ['/site/mutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
+                            ['class' => 'btn btn-lg btn-danger btn btn-mini', 'id' => 'muted_user']
                         );
                     }else if($user->mutted == 'yes'){
                         echo Html::a(
-                            'Включить микрофон',
+                            '<small>Включить микрофон</small>',
                             ['/site/unmutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                            ['class' => 'btn btn-lg btn-success', 'id' => 'unmuted_user']
+                            ['class' => 'btn btn-lg btn-success btn btn-mini', 'id' => 'unmuted_user']
                         );
                     }?></td>
                 <td><?= Html::a(
-                        'Отобразить всем',
+                        '<small>Отобразить всем</small>',
                         ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
                         ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']) ?></td>
             </tr>
@@ -91,6 +94,9 @@ $this->title = 'Актиные конференции';
     <?php } ?>
 
     <?php Pjax::end(); ?>
+    </div>
+
+
     </div>
 
 </div>

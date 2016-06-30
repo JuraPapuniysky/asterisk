@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
 
-    print_r($callerids);
+    print_r($info);
 
     ?>
 
