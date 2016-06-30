@@ -18,7 +18,7 @@ $this->title = 'Актиные конференции';
     <?php Pjax::begin();?>
 
 
-    <?php echo \common\widgets\ConfUsers::widget(['conferences' => $conferences]); ?>
+    <?php echo \common\widgets\ConfUsers::widget(['conferences' => $conferences, 'size' => 10]); ?>
 
 
     <?php Pjax::end(); ?>
