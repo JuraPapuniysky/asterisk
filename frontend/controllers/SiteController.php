@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 
 
+use common\models\CallUserManual;
 use common\models\Clients;
 use common\models\ConfBridgeActions;
 use PAMI\Message\Action\RedirectAction;
@@ -225,9 +226,9 @@ class SiteController extends Controller
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
 
-        $pami->call($conference, "SIP/$callerid");
+        $pami->call($conference, $callerid);
         usleep(1000);
-
+        $pami->closeAMI();
         $confArray = $this->viewUsers();
 
         return $this->render('index',[
@@ -311,8 +312,20 @@ class SiteController extends Controller
     {
         $model = new Clients();
 
+        $callUser = new CallUserManual();
+
+        if($callUser->load(Yii::$app->request->post()))
+        {
+            $pami = Yii::$app->pamiconn;
+            $pami->initAMI();
+            $pami->call($callUser->conference, $callUser->userNumber);
+            usleep(1000);
+            $pami->closeAMI();
+        }
+
         return $this->render('catalog', [
             'model' => $model->find()->all(),
+            'callUser' => $callUser,
         ]);
     }
 

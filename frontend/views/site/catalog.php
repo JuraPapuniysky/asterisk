@@ -2,16 +2,39 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ClientsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $callUser common\models\CallUserManual */
 
 $this->title = 'Справочник';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clients-index">
+<div class="row">
 
+    <div class="col-md-3">
+        <h1>Ручной ввод номера</h1>
+        <?php $form = ActiveForm::begin(); ?>
+
+        <?= $form->field($callUser, 'conference')->textInput() ?>
+
+
+
+        <?= $form->field($callUser, 'userNumber')->textInput() ?>
+
+
+
+        <div class="form-group">
+            <?= Html::submitButton('Звонить', ['class' => 'btn btn-success']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
+    <div class="col-md-9">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -71,7 +94,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ['/site/call-checked/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerids' => ""],
         ['class' => 'btn btn-lg btn-success pull-right', 'id' => 'call-all-button']
     );?>
-
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">

@@ -82,9 +82,9 @@ class PAMIConn extends Component
      * @param $channel
      * @return mixed
      */
-    public function call($conference, $channel)
+    public function call($conference, $callerId)
     {
-        $originate = new OriginateAction($channel);
+        $originate = new OriginateAction("SIP/$callerId");
         $originate->setContext($this->context);
         $originate->setExtension($conference);
         $originate->setPriority(1);
