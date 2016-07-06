@@ -156,7 +156,7 @@ class PAMIConn extends Component
     public function setSingleVideo($conference, $channel)
     {
         $message = $this->clientImpl->send(new ConfbridgeSetSingleVideoSrc($conference, $channel));
-        uslepp(1000);
+        usleep(1000);
         return $message;
     }
 

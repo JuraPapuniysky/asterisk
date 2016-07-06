@@ -21,13 +21,13 @@ use yii\helpers\Html;
     echo Html::a(
         "Выключить все микрофоны $conf->conference",
         ['/site/mutte-unmutte-all/', 'conference' => $conf->conference, 'action' => 'yes'],
-        ['class' => 'btn btn-lg btn-danger', 'id' => 'muted_user']
-    );
+        ['class' => 'btn btn-small btn-danger', 'id' => 'muted_user']
+    ).'<br />';
 
     echo Html::a(
         "Включить все микрофоны $conf->conference",
         ['/site/mutte-unmutte-all/', 'conference' => $conf->conference, 'action' => 'no' ],
-        ['class' => 'btn btn-lg btn-success', 'id' => 'muted_user']
+        ['class' => 'btn btn-small btn-success', 'id' => 'muted_user']
     );
 
     ?>
@@ -62,15 +62,15 @@ use yii\helpers\Html;
                     <td><?php if($user->mutted == 'no')
                         {
                             echo Html::a(
-                                '<small></small>',
+                                '<img src="/images/icons/microphone_on.png" alt="">',
                                 ['/site/mutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                                ['class' => 'glyphicon glyphicon-volume-up', 'id' => 'muted_user']
+                                ['img' => '/images/icons/microphone_on.png', 'id' => 'muted_user']
                             );
                         }else if($user->mutted == 'yes'){
                             echo Html::a(
-                                '<small></small>',
+                                '<small><img src="/images/icons/microphone_off.png" alt=""></small>',
                                 ['/site/unmutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                                ['class' => 'glyphicon glyphicon-volume-off ', 'id' => 'unmuted_user']
+                                ['img' => '/images/icons/microphone_off.png', 'id' => 'unmuted_user']
                             );
                         }?></td>
                     <td><?= Html::a(
