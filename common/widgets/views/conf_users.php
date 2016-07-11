@@ -98,7 +98,3 @@ $(document).ready(function() {
 JS;
 $this->registerJs($script);
 ?>
-
-<pre>
-    <?php print_r($conferences); ?>
-</pre>
