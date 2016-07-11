@@ -19,7 +19,13 @@ class ConfUsers extends Widget
         $columns = [];
         foreach ($this->conferences as $conference)
         {
-            $columns[$count] = array_chunk($conference, $this->size);
+            $sortConf = [];
+            foreach ($conference as $user)
+            {
+                $sortConf[$user['name']] = $user;
+            }
+            krsort($sortConf);
+            $columns[$count] = array_chunk($sortConf, $this->size);
             $count++;
         }
         return $columns;
