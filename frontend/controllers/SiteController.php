@@ -239,6 +239,7 @@ class SiteController extends Controller
     /**
      * @param $conference
      * @param $callerids
+     * @return string
      */
     public function actionCallChecked($conference, $callerids)
     {
@@ -407,7 +408,7 @@ class SiteController extends Controller
 
                     if(!$client = $this->findByCallerId($user->callerId)) {
                         $client = new Clients();
-                        $client->name = 'unknown';
+                        $client->name = $user->callerId;
                         $client->callerid = $user->callerId;
                         $client->conference = $user->conference;
                         $client->channel = $user->channel;

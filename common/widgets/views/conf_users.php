@@ -87,7 +87,11 @@ use yii\helpers\Html;
         <?php } ?>
 
 
-<?php } }?>
+<?php } }
+echo '<pre>';
+print_r($conferences);
+echo '</pre>';
+?>
 
 
 <?php
