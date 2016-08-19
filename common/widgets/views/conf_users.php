@@ -87,17 +87,13 @@ use yii\helpers\Html;
         <?php } ?>
 
 
-<?php } }
-echo '<pre>';
-print_r($conferences);
-echo '</pre>';
-?>
+<?php } }?>
 
 
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 10000);
+    setInterval(function(){ $("#refreshButton").click(); }, 50000);
 });
 JS;
 $this->registerJs($script);
