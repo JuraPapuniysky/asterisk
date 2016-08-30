@@ -26,6 +26,7 @@ use frontend\models\ContactForm;
 class SiteController extends Controller
 {
 
+    public static $conf;
 
     /**
      * @inheritdoc
@@ -82,6 +83,7 @@ class SiteController extends Controller
             
         return $this->render('index',[
            'conferences' => $confArray,
+            'conf' => self::$conf,
         ]);
     }
 

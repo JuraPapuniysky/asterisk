@@ -24,11 +24,11 @@ class ConferenceUser extends Model
 
     public $video = true;
 
-    public function __construct($conference, $channel, $mutted = false, $video = true)
+    public function __construct($conference, $channel, $user, $mutted = false, $video = true)
     {
         $this->conference = $conference;
         $this->channel = $channel;
-        $this->callerId = $this->getCallerId();
+        $this->callerId = $this->getCallerId($user);
         $this->mutted = $mutted;
         $this->video = $video;
         if($mutted == true)
@@ -55,9 +55,12 @@ class ConferenceUser extends Model
         $this->video = false;
     }
 
-    public function getCallerId()
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function getCallerId($user)
     {
-        list($num, $else) = explode('-', preg_replace("#[^0-9\-]*#is", "", $this->channel), 2);
-        return $num;
+        return preg_replace("#[^0-9\-]*#is", "", substr(trim($user), -6));
     }
 }

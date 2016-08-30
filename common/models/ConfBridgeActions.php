@@ -3,6 +3,7 @@
 namespace common\models;
 
 
+
 use PAMI\Message\Action\CommandAction;
 use yii\base\Model;
 
@@ -46,12 +47,16 @@ class ConfBridgeActions extends Model
             foreach ($conferences as $conference) {
 
                 $message = $this->clientImpl->send(new CommandAction("confbridge list $conference"));
+
                 $users = $this->unsetElems(explode("\n", $message->getRawContent()), 4);
+
                 array_pop($users);
                 $i = 0;
-                foreach ($this->strTok($users) as $user) {
 
-                    $userArray[$i] = new ConferenceUser($conference, $user);
+                foreach ($users as $user) {
+
+                    $channel = $this->strTok([$user]);
+                    $userArray[$i] = new ConferenceUser($conference, $channel[0], $user);
                     $i++;
                 }
                 $conferenceList = [$conference => $userArray];
@@ -134,11 +139,11 @@ class ConfBridgeActions extends Model
     
     
 
-    public function getCallerId($channel)
-    {
-        list($num, $else) = explode('-', preg_replace("#[^0-9\-]*#is", "", $channel), 2);
-        return $num;
-    }
+   // public function getCallerId($channel)
+   // {
+    //    list($num, $else) = explode('-', preg_replace("#[^0-9\-]*#is", "", $channel), 2);
+    //    return $num;
+   // }
 
 
     public function unsetElems($array, $count)
@@ -165,3 +170,4 @@ class ConfBridgeActions extends Model
     }
 
 }
+
