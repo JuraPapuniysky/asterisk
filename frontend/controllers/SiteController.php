@@ -26,7 +26,6 @@ use frontend\models\ContactForm;
 class SiteController extends Controller
 {
 
-    public static $conf;
 
     /**
      * @inheritdoc
