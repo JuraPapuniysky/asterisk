@@ -2,10 +2,10 @@
 -- version 4.6.1
 -- http://www.phpmyadmin.net
 --
--- Хост: localhost
--- Время создания: Сен 02 2016 г., 08:14
--- Версия сервера: 5.7.13-0ubuntu0.16.04.2
--- Версия PHP: 7.0.8-0ubuntu0.16.04.2
+-- Host: localhost
+-- Generation Time: Oct 03, 2016 at 08:03 AM
+-- Server version: 5.7.15-0ubuntu0.16.04.1
+-- PHP Version: 7.0.8-0ubuntu0.16.04.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `asterisk`
+-- Database: `asterisk`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `clients`
+-- Table structure for table `clients`
 --
 
 CREATE TABLE `clients` (
@@ -37,7 +37,7 @@ CREATE TABLE `clients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Дамп данных таблицы `clients`
+-- Dumping data for table `clients`
 --
 
 INSERT INTO `clients` (`id`, `name`, `channel`, `conference`, `mutte`, `callerid`, `video`) VALUES
@@ -76,14 +76,14 @@ INSERT INTO `clients` (`id`, `name`, `channel`, `conference`, `mutte`, `callerid
 (37, 'test', NULL, NULL, 'yes', 312, 'yes'),
 (38, '894018', 'SIP/894018-00000021', 0, 'no', 894018, 'yes'),
 (39, '894010', 'SIP/894010-00000083', 0, 'no', 894010, 'yes'),
-(40, '323', 'SIP/SOE_193-000000bf', 0, 'no', 323, 'yes'),
-(41, '888312', 'SIP/SOE_193-0000008c', 0, 'yes', 888312, 'yes'),
+(40, '323', 'SIP/SOE_193-000003a5', 0, 'no', 323, 'yes'),
+(41, '888312', 'SIP/SOE_193-000003a6', 0, 'no', 888312, 'yes'),
 (42, '213', 'SIP/SOE_193-0000008d', 0, 'yes', 213, 'yes');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `migration`
+-- Table structure for table `migration`
 --
 
 CREATE TABLE `migration` (
@@ -92,7 +92,7 @@ CREATE TABLE `migration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Дамп данных таблицы `migration`
+-- Dumping data for table `migration`
 --
 
 INSERT INTO `migration` (`version`, `apply_time`) VALUES
@@ -102,7 +102,7 @@ INSERT INTO `migration` (`version`, `apply_time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -118,30 +118,30 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Дамп данных таблицы `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'admin', 'QJtORypnY2RPPk3dKRHO1u8FQhWupuOL', '$2y$13$JL/sQXIJ3rvkGQ8vMRULFOJfaUxJ5M5KKnWRQN5gqpEqb.honRmt2', NULL, 'mail@admin.com', 10, 1465807564, 1465807564);
 
 --
--- Индексы сохранённых таблиц
+-- Indexes for dumped tables
 --
 
 --
--- Индексы таблицы `clients`
+-- Indexes for table `clients`
 --
 ALTER TABLE `clients`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `migration`
+-- Indexes for table `migration`
 --
 ALTER TABLE `migration`
   ADD PRIMARY KEY (`version`);
 
 --
--- Индексы таблицы `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
@@ -150,16 +150,16 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `password_reset_token` (`password_reset_token`);
 
 --
--- AUTO_INCREMENT для сохранённых таблиц
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT для таблицы `clients`
+-- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
--- AUTO_INCREMENT для таблицы `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
