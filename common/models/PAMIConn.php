@@ -84,7 +84,11 @@ class PAMIConn extends Component
      */
     public function call($conference, $callerId)
     {
-        $originate = new OriginateAction("SIP/$callerId");
+        if(substr($callerId, 0, 2) == '894') {
+            $originate = new OriginateAction("SIP/$callerId");
+        }elseif (strlen($callerId) == 3 or substr($callerId, 0, 2) != '894'){
+            $originate = new OriginateAction("SIP/SOE_193/$callerId");
+        }
         $originate->setContext($this->context);
         $originate->setExtension($conference);
         $originate->setPriority(1);

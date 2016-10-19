@@ -20,7 +20,7 @@ return [
         'pamiconn' => [
             'class' => 'common\models\PAMIConn',
             'options' => [
-                'host' => '10.109.71.196',
+                'host' => '10.109.36.195',
                 'port' => '5038',
                 'username' => 'bos',
                 'secret' => 'Bthfh[bZ',

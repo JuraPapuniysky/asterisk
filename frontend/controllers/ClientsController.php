@@ -117,7 +117,7 @@ class ClientsController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/site/catalog']);
     }
 
     /**
