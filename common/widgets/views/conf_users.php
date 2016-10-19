@@ -62,13 +62,13 @@ use yii\helpers\Html;
                     <td><?php if($user->mutted == 'no')
                         {
                             echo Html::a(
-                                '<img src="/images/icons/microphone_on.png" alt="">',
+                                Html::img('/images/icons/microphone_on.png'),
                                 ['/site/mutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
                                 ['img' => '/images/icons/microphone_on.png', 'id' => 'muted_user']
                             );
                         }else if($user->mutted == 'yes'){
                             echo Html::a(
-                                '<small><img src="/images/icons/microphone_off.png" alt=""></small>',
+                                '<small>'.Html::img('/images/icons/microphone_off.png').'</small>',
                                 ['/site/unmutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
                                 ['img' => '/images/icons/microphone_off.png', 'id' => 'unmuted_user']
                             );
