@@ -229,7 +229,7 @@ class SiteController extends Controller
         $pami->call($conference, $callerid);
         usleep(1000);
         $pami->closeAMI();
-        $confArray = $this->viewUsers();
+        $confArray = $this->viewUsers($callerid);
 
         return $this->render('index',[
             'conferences' => $confArray,
@@ -301,6 +301,7 @@ class SiteController extends Controller
             $pami->initAMI();
             $confBridge = new ConfBridgeActions($pami->clientImpl);
             $confBridge->confBridgeMute($conference, $channel);
+            $pami->setSingleVideo($conference, $channel);
         }
         $confArray = $this->viewUsers();
 
@@ -390,9 +391,8 @@ class SiteController extends Controller
         }
     }
 
-    protected function viewUsers()
+    protected function viewUsers($callerId = null)
     {
-
         $pami = \Yii::$app->pamiconn;
         $pami->initAMI();
         $confBridge = new ConfBridgeActions($pami->clientImpl);
@@ -405,6 +405,14 @@ class SiteController extends Controller
             foreach ($confUsers as $conference) {
                 $i = 0;
                 foreach ($conference as $user) {
+
+                    if($user->callerId == ""){
+                        if($callerId != null) {
+                            $user->callerId = $callerId;
+                        }else{
+                            $user->callerId = self::findByChannel($user->channel)->callerid;
+                        }
+                    }
 
                     if(!$client = $this->findByCallerId($user->callerId)) {
                         $client = new Clients();

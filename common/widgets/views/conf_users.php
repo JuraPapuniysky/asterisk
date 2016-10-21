@@ -93,7 +93,7 @@ use yii\helpers\Html;
 <?php
 $script = <<< JS
 $(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 3000);
+    setInterval(function(){ $("#refreshButton").click(); }, 6000);
 });
 JS;
 $this->registerJs($script);

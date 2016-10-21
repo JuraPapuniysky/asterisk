@@ -84,11 +84,13 @@ class PAMIConn extends Component
      */
     public function call($conference, $callerId)
     {
-        if(substr($callerId, 0, 2) == '894') {
+
+        if(substr($callerId, 0, 3) == '894') {
             $originate = new OriginateAction("SIP/$callerId");
-        }elseif (strlen($callerId) == 3 or substr($callerId, 0, 2) != '894'){
+        }elseif (strlen($callerId) == 3 or substr($callerId, 0, 3) != '894'){
             $originate = new OriginateAction("SIP/SOE_193/$callerId");
         }
+
         $originate->setContext($this->context);
         $originate->setExtension($conference);
         $originate->setPriority(1);
@@ -104,11 +106,11 @@ class PAMIConn extends Component
      */
     public function callChecked($conference, $callerids)
     {
-        $callerids = explode(',',$callerids);
+        $callerids = explode(',', $callerids);
         array_pop($callerids);
         foreach ($callerids as $callerid)
         {
-            $this->call($conference, "SIP/$callerid");
+            $this->call($conference, $callerid);
         }
     }
 

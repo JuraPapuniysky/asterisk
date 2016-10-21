@@ -54,7 +54,6 @@ class ConfBridgeActions extends Model
                 $i = 0;
 
                 foreach ($users as $user) {
-
                     $channel = $this->strTok([$user]);
                     $userArray[$i] = new ConferenceUser($conference, $channel[0], $user);
                     $i++;
