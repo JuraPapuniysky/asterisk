@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function($data){
                             if(array_search($data->callerid,  Yii::$app->pamiconn->confUser) != null){
-                                return "<span class=\"glyphicon glyphicon-ok text-success\">";
+                                return "<h4><span class=\"glyphicon glyphicon-ok text-success\"></span></h4>";
                             }else{
                                 return ' ';
                             }
