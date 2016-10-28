@@ -5,6 +5,7 @@ namespace frontend\controllers;
 
 use common\models\CallUserManual;
 use common\models\Clients;
+use common\models\ClientsSearch;
 use common\models\ConfBridgeActions;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
@@ -312,6 +313,9 @@ class SiteController extends Controller
     
     public function actionCatalog()
     {
+        $searchModel = new ClientsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setPagination(false);
         $model = new Clients();
 
         $callUser = new CallUserManual();
@@ -328,6 +332,8 @@ class SiteController extends Controller
         return $this->render('catalog', [
             'model' => $model->find()->all(),
             'callUser' => $callUser,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

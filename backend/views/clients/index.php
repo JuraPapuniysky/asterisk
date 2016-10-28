@@ -1,0 +1,50 @@
+<?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel backend\models\ClientsSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Clients';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="clients-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <p>
+        <?= Html::a('Create Clients', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
+            //'id',
+            'name',
+            //'channel',
+            //'conference',
+            //'mutte',
+             'callerid',
+            // 'video',
+            [
+                'label' => 'Вызов',
+                'format' => 'raw',
+                'value' => function($data){
+                    return  Html::a(
+                        "Вызов",
+                        ['/site/call/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerid' => $data->callerid],
+                        ['class' => 'btn btn-lg btn-success', 'id' => 'call-button']
+                    );
+                }
+            ],
+
+
+
+        ],
+    ]); ?>
+</div>
