@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use frontend\controllers\SiteController;
 use Yii;
+
 
 /**
  * This is the model class for table "clients".
@@ -64,5 +66,16 @@ class Clients extends \yii\db\ActiveRecord
         return $user;
     }
 
+    public static function getUserConfId($conf)
+    {
+        $ids = [];
+        foreach ($conf as $column){
+            foreach ($column as $user){
+                array_push($ids, $user->callerId);
+            }
+        }
+        return $ids;
+    }
 
 }
+

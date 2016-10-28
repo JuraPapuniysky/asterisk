@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Справочник';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="clients-index">
 <div class="row">
@@ -95,6 +96,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => $data->name,
                             'onclick' => 'do_one(this)',
                         ]);
+                    },
+
+                ],
+
+                [
+                    'label' => '',
+                    'format' => 'raw',
+                    'value' => function($data){
+                            if(array_search($data->callerid,  Yii::$app->pamiconn->confUser) != null){
+                                return "<span class=\"glyphicon glyphicon-ok text-success\">";
+                            }else{
+                                return ' ';
+                            }
                     },
 
                 ],

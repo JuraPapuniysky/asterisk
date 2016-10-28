@@ -329,6 +329,12 @@ class SiteController extends Controller
             $pami->closeAMI();
         }
 
+
+
+        $a = Clients::getUserConfId($this->viewUsers());
+
+        Yii::$app->pamiconn->confUser = $a;
+
         return $this->render('catalog', [
             'model' => $model->find()->all(),
             'callUser' => $callUser,

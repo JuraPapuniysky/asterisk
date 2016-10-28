@@ -12,6 +12,9 @@ use common\models\Clients;
  */
 class ClientsSearch extends Clients
 {
+
+    public $userConf;
+
     /**
      * @inheritdoc
      */

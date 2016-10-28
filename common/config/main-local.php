@@ -28,6 +28,7 @@ return [
                 'read_timeout' => 50000,
                 'scheme' => 'tcp://',// try tls://
             ],
+            'confUser' => [],
             'generalConference' => '000',
             'context' => 'from-internal',
         ],
