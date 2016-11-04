@@ -10,7 +10,7 @@ class ConfUsers extends Widget
 {
 
     public $conferences;
-    public $size = 10;
+    public $size = 2;
     
 
     public function getColumns()

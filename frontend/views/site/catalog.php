@@ -22,11 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($callUser, 'conference')->textInput() ?>
 
-
-
         <?= $form->field($callUser, 'userNumber')->textInput() ?>
-
-
 
         <div class="form-group">
             <?= Html::submitButton('Звонить', ['class' => 'btn btn-success']) ?>

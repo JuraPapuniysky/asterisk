@@ -37,7 +37,7 @@ use yii\helpers\Html;
 
 
     <?php foreach ($arrayConf as $column){ ?>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <table class="table table table-condensed table-hover table-bordered">
             <thead>
             <tr>
@@ -94,6 +94,10 @@ use yii\helpers\Html;
 $script = <<< JS
 $(document).ready(function() {
     setInterval(function(){ $("#refreshButton").click(); }, 6000);
+});
+
+$(document).ready(function() {
+    setInterval(function(){ location.reload(); }, 20000);
 });
 JS;
 $this->registerJs($script);
