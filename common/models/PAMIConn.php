@@ -17,6 +17,7 @@ use yii\web\NotFoundHttpException;
 
 class PAMIConn extends Component
 {
+
     public $options;
     public $clientImpl;
     public $generalConference;
@@ -79,7 +80,7 @@ class PAMIConn extends Component
     }
 
     /**
-     * Create the call from asterisk yo user $chanell.
+     * Create the call from asterisk to user $chanell.
      * @param $channel
      * @return mixed
      */
@@ -89,9 +90,11 @@ class PAMIConn extends Component
         if(substr($callerId, 0, 3) == '894') {
             $originate = new OriginateAction("SIP/$callerId");
             $originate->setCallerId($callerId);
+            $originate->setTimeout(10000);
         }elseif (strlen($callerId) == 3 or substr($callerId, 0, 3) != '894'){
             $originate = new OriginateAction("SIP/SOE_193/$callerId");
             $originate->setCodecs(['alaw']);
+            $originate->setTimeout(10000);
             $originate->setCallerId($callerId);
         }
 

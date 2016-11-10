@@ -14,6 +14,7 @@ use Yii;
  */
 class ListModel extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -21,6 +22,7 @@ class ListModel extends \yii\db\ActiveRecord
     {
         return 'list';
     }
+
 
     /**
      * @inheritdoc

@@ -7,6 +7,7 @@ use common\models\CallUserManual;
 use common\models\Clients;
 use common\models\ClientsSearch;
 use common\models\ConfBridgeActions;
+use common\models\ListModel;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
 use yii\base\InvalidParamException;
@@ -342,6 +343,8 @@ class SiteController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+
 
     public function actionMutteUnmutteAll($conference, $action)
     {
