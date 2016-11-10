@@ -37,7 +37,7 @@ class Clients extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'callerid'], 'required'],
-            [['conference', 'callerid'], 'integer'],
+            [['conference', 'callerid'], 'string', 'max' => 15],
             [['name', 'channel'], 'string', 'max' => 255],
             [['mutte', 'video'], 'string', 'max' => 5],
         ];

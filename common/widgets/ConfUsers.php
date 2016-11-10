@@ -10,7 +10,7 @@ class ConfUsers extends Widget
 {
 
     public $conferences;
-    public $size = 2;
+    public $size = 15;
     
 
     public function getColumns()
@@ -24,7 +24,7 @@ class ConfUsers extends Widget
             {
                 $sortConf[$user['name']] = $user;
             }
-            krsort($sortConf);
+            ksort($sortConf);
             $columns[$count] = array_chunk($sortConf, $this->size);
             $count++;
         }
