@@ -21,7 +21,7 @@ class m161109_124043_list_client extends Migration
             'mutte' => $this->char(5),
             'callerid' => $this->char(15),
             'video' => $this->char(5),
-        ]);
+        ], $tableOptions);
 
         $this->createTable('{{%list}}', [
             'id' => $this->primaryKey(),
