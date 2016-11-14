@@ -77,5 +77,10 @@ class Clients extends \yii\db\ActiveRecord
         return $ids;
     }
 
+    public static function getHeadpiece()
+    {
+        return self::findOne(['callerid' => '894490']);
+    }
+
 }
 

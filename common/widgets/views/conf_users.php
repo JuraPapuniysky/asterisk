@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 
 //$conferences = $columns;
-
+$headpiece = \common\models\Clients::getHeadpiece();
  echo Html::a(
     '',
     ['/site/index/'],
@@ -46,6 +46,7 @@ use yii\helpers\Html;
                 <th>Имя</th>
                 <th>Номер</th>
                 <th>Управление микрофоном</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -62,21 +63,26 @@ use yii\helpers\Html;
                     <td><?php if($user->mutted == 'no')
                         {
                             echo Html::a(
-                                'Выключить микрофон',
+                                '<span class="glyphicon glyphicon-remove">Выкл. микрофон</span>',
                                 ['/site/mutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                                ['class' => 'glyphicon glyphicon-remove text-danger', 'id' => 'muted_user']
+                                ['class' => 'btn btn-danger', 'id' => 'muted_user']
                             );
                         }else if($user->mutted == 'yes'){
                             echo Html::a(
-                                'Включить микрофон',
+                                '<span class="glyphicon glyphicon-ok">Вкл. микрофон</span>',
                                 ['/site/unmutte/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                                ['class' => 'glyphicon glyphicon-ok text-success', 'id' => 'unmuted_user']
+                                ['class' => 'btn btn-success', 'id' => 'unmuted_user']
                             );
                         }?></td>
                     <td><?= Html::a(
-                            '<small></small>',
+                            '<span class="glyphicon glyphicon-facetime-video"></span>',
                             ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                            ['class' => 'glyphicon glyphicon-facetime-video', 'id' => 'muted_user']) ?></td>
+                            ['class' => 'btn btn-default btn-lg', 'id' => 'muted_user']) ?>
+                    </td>
+                    <td><?= Html::a(
+                            '<span class="glyphicon glyphicon-picture"></span>',
+                            ['/site/set-single-video/', 'conference' => $headpiece->conference, 'channel' => $headpiece->channel],
+                            ['class' => 'btn btn-default btn-lg ', 'id' => 'muted_user']) ?></td>
                 </tr>
             <?php } ?>
             </tbody>

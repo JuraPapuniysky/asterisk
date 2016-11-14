@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php $i = 1; foreach ($list->getListClients()->all() as $client){ ?>
+                        <?php $i = 1; foreach ($list->getListClients()->orderBy('name')->all() as $client){ ?>
                             <tr>
                                 <td><?= $i ?></td>
                                 <td><?= $client->name ?></td>
