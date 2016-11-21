@@ -56,10 +56,12 @@ class ConferenceUsers extends Model
      * @param $activeClients
      * @param $confList
      */
-    public static function getConference($activeClients, $confList)
+    public static function getConference()
     {
+        self::getActiveClients();
+        self::getConfList();
         $conference = [];
-        foreach ($confList as $client){
+        foreach (self::$confList as $client){
             $user = new ConferenceUsers();
             $user->id = $client->id;
             $user->name = $client->name;
@@ -67,23 +69,48 @@ class ConferenceUsers extends Model
             $user->callerId = $client->callerid;
             $user->mutte = $client->mutte;
             $user->video = $client->video;
-            foreach ($activeClients as $key => $activeClient){
+            foreach (self::$activeClients as $key => $activeClient){
                 if($user->callerId == $activeClient['calleridnum']){
                     $user->isActive = true;
                     $user->channel = $activeClient['channel'];
-
-                    unset($activeClients[$key]);
+                    unset(self::$activeClients[$key]);
                 }
-
             }
-
             $clients = Clients::findOne(['id' => $client->id]);
             $clients->channel = $user->channel;
             $clients->mutte = $user->mutte;
             $clients->save();
             array_push($conference, $user);
+
+
         }
         return $conference;
+    }
+
+    public static function nonListPush($conference)
+    {
+        if (self::$activeClients != null){
+            foreach (self::$activeClients as $key => $activeClient){
+                $client = Clients::findOne(['callerid' => $activeClient['calleridnum']]);
+                $listUser = new ConferenceUsers();
+                $listUser->id = $client->id;
+                $listUser->name = $client->name;
+                $listUser->conference = $client->conference;
+                $listUser->callerId = $client->callerid;
+                $listUser->mutte = $client->mutte;
+                $listUser->video = $client->video;
+                $listUser->channel = $activeClient['channel'];
+                $listUser->isActive = true;
+                unset(self::$activeClients[$key]);
+                $client->channel = $listUser->channel;
+                $client->save();
+                array_push($conference, $listUser);
+            }
+            return $conference;
+        }else{
+            return $conference;
+        }
+
     }
 
 

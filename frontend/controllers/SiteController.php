@@ -86,10 +86,10 @@ class SiteController extends Controller
         $confUsers = new ConferenceUsers();
         $confUsers::getConfList();
         $confUsers::getActiveClients();
-        $a = $confUsers::$confList;
-        $b = $confUsers::$activeClients;
 
-        $conf = $confUsers::getConference($b, $a);
+        $conf = $confUsers::getConference();
+
+        $conf = $confUsers::nonListPush($conf);
 
         $confArray = $this->viewUsers();
             
