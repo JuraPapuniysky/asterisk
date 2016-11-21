@@ -7,6 +7,8 @@ use common\models\CallUserManual;
 use common\models\Clients;
 use common\models\ClientsSearch;
 use common\models\ConfBridgeActions;
+use common\models\ConfBridgeListAction;
+use common\models\ConferenceUsers;
 use common\models\ListModel;
 use PAMI\Message\Action\RedirectAction;
 use Yii;
@@ -80,10 +82,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $confUsers = new ConferenceUsers();
+        $confUsers::getConfList();
+        $confUsers::getActiveClients();
+        $a = $confUsers::$confList;
+        $b = $confUsers::$activeClients;
+
+        $conf = $confUsers::getConference($b, $a);
+
         $confArray = $this->viewUsers();
             
         return $this->render('index',[
-           'conferences' => $confArray,
+           'conferences' => $conf,
         ]);
     }
 

@@ -17,11 +17,16 @@ $this->title = 'Актиные конференции';
 
     <div class="body-content">
 
-    <?php Pjax::begin();?>
+    <?php //Pjax::begin();?>
 
-    <?php echo \common\widgets\ConfUsers::widget(['conferences' => $conferences, 'size' => 10]); ?>
+    <?php// echo \common\widgets\ConfUsers::widget(['conferences' => $conferences, 'size' => 10]); ?>
 
-    <?php Pjax::end(); ?>
+    <?php //Pjax::end(); ?>
+
+<pre>
+        <?php print_r($conferences)?>
+</pre>
+
     </div>
   </div>
 
