@@ -82,7 +82,8 @@ $headpiece = \common\models\Clients::getHeadpiece();
                     <td><?= Html::a(
                             '<span class="glyphicon glyphicon-picture"></span>',
                             ['/site/set-single-video/', 'conference' => $headpiece->conference, 'channel' => $headpiece->channel],
-                            ['class' => 'btn btn-default btn-lg ', 'id' => 'muted_user']) ?></td>
+                            ['class' => 'btn btn-default btn-lg ', 'id' => 'muted_user']) ?>
+                    </td>
                 </tr>
             <?php } ?>
             </tbody>

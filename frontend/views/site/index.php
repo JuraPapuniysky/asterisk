@@ -19,13 +19,11 @@ $this->title = 'Актиные конференции';
 
     <?php //Pjax::begin();?>
 
-    <?php// echo \common\widgets\ConfUsers::widget(['conferences' => $conferences, 'size' => 10]); ?>
+    <?= \common\widgets\ListUsers::widget(['conferences' => $conferences]) ?>
 
     <?php //Pjax::end(); ?>
 
-<pre>
-        <?php print_r($conferences)?>
-</pre>
+
 
     </div>
   </div>

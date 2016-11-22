@@ -5,6 +5,7 @@ namespace common\models;
 
 
 use yii\base\Model;
+use PAMI\Message\Action\CommandAction;
 
 class ConferenceUsers extends Model
 {
@@ -20,17 +21,16 @@ class ConferenceUsers extends Model
     public static $activeClients;
     public static $confList;
 
-
     /**
-     *
+     *  Sets the static list of conference users
      */
-    public static function getConfList()
+    protected static function getConfList()
     {
         self::$confList = ListModel::find()->where(['name' => '123'])->one()->getListClients()->orderBy('name')->all();
     }
 
     /**
-     *
+     * Set active conference users
      */
     public static function getActiveClients()
     {
@@ -47,14 +47,18 @@ class ConferenceUsers extends Model
                 }
             }
         }else{
-            $activeUsers = null;
+            self::$activeClients = $activeUsers = null;
+            return self::$activeClients;
         }
         self::$activeClients = $activeUsers;
+        return self::$activeClients;
     }
 
     /**
+     * Gets list of static users
      * @param $activeClients
      * @param $confList
+     * @return array
      */
     public static function getConference()
     {
@@ -87,6 +91,12 @@ class ConferenceUsers extends Model
         return $conference;
     }
 
+
+    /**
+     * Adds to static list of users non staic users
+     * @param $conference
+     * @return mixed
+     */
     public static function nonListPush($conference)
     {
         if (self::$activeClients != null){
@@ -112,6 +122,46 @@ class ConferenceUsers extends Model
         }
 
     }
+
+    /**
+     * Mutes a specified user in a specified conference.
+     * @param $conference num of conference
+     * @param $channel channel of users
+     * @return mixed
+     */
+    public static function mutteUser($client)
+    {
+
+        $client->mutte = 'yes';
+        if($client->save()) {
+            $pami = \Yii::$app->pamiconn;
+            $pami->initAmi();
+            $message = $pami->clientImpl->send(new CommandAction("confbridge mute $client->conference $client->channel"));
+            usleep(1000);
+            return $message;
+        }
+    }
+
+    /**
+     * Unmutes a specified user in a specified conference
+     * @param $conference
+     * @param $channel
+     * @return mixed
+     */
+    public static function unmutteUser($client)
+    {
+
+        $client->mutte = 'no';
+        if($client->save()) {
+            $pami = \Yii::$app->pamiconn;
+            $pami->initAmi();
+            $message = $pami->clientImpl->send(new CommandAction("confbridge unmute $client->conference $client->channel"));
+            usleep(1000);
+            return $message;
+        }
+    }
+
+
 
 
 
