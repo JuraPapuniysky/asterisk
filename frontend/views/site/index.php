@@ -17,11 +17,11 @@ $this->title = 'Актиные конференции';
 
     <div class="body-content">
 
-    <?php //Pjax::begin();?>
+
 
     <?= \common\widgets\ListUsers::widget(['conferences' => $conferences]) ?>
 
-    <?php //Pjax::end(); ?>
+
 
 
 

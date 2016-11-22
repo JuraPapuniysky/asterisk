@@ -4,9 +4,13 @@
 
 use yii\helpers\Html;
 use rmrevin\yii\fontawesome\cdn\AssetBundle;
+use yii\widgets\Pjax;
 
 $headpiece = \common\models\Clients::getHeadpiece();
 AssetBundle::register($this);
+
+
+
 ?>
 
 
@@ -35,7 +39,7 @@ AssetBundle::register($this);
 
 
 <div class="row">
-
+    <?php Pjax::begin();?>
     <div class="col-md-4">
 
         <table class="table table table-condensed table-hover table-bordered">
@@ -54,7 +58,14 @@ AssetBundle::register($this);
             </tr>
             </thead>
             <tbody>
-                <?php $count = 1; foreach ($conferences as $user){ ?>
+                <?php
+                echo Html::a(
+                    '',
+                    ['/site/index/'],
+                    ['class' => 'glyphicon glyphicon-refresh', 'id' => 'refreshButton']
+                );
+
+                $count = 1; foreach ($conferences as $user){ ?>
                     <?php if ($user->isActive){ ?>
                         <tr class="text-success">
                         <?php } else { ?>
@@ -63,15 +74,20 @@ AssetBundle::register($this);
                         <td><?= Html::a(
                             "<span class=\"glyphicon glyphicon-remove\">",
                             ['/site/kick/', 'conference' => $user->conference, 'channel' => $user->channel ],
-                            ['class' => '', 'data-confirm' => "Вы уверены, что хотите удалить пользователя $user->name из конференции?"]
+                            ['class' => '',]
                         ) ?></td>
                     <td><?php
                             if(!$user->isActive) {
                              echo   Html::a(
                                     "",
                                     ['/site/call/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerid' => $user->callerId],
+                                    ['class' => 'btn btn-lg btn-default fa fa-phone', 'id' => 'call-button']);
+                            }else{
+                              echo  Html::a(
+                                    "",
+                                    ['/site/index/',],
                                     ['class' => 'btn btn-lg btn-success fa fa-phone', 'id' => 'call-button']);
-                        }
+                            }
 
 
                         ?></td>
@@ -107,16 +123,19 @@ AssetBundle::register($this);
                     </tr>
 
                 <?php $count++; } ?>
+
+
+
             </tbody>
         </table>
 
     </div>
-
+    <?php Pjax::end(); ?>
 </div>
 <div class="row">
     <div class="col-md-2">
         <?php echo Html::a(
-            "Удалить всех учасников",
+            "Отключить всех учасников",
             ['/site/kick-all/',],
             ['class' => 'btn btn-danger glyphicon glyphicon-remove', 'id' => 'kick_users']
         );
@@ -124,3 +143,15 @@ AssetBundle::register($this);
         ?>
     </div>
 </div>
+<?php
+$script = <<< JS
+$(document).ready(function() {
+    setInterval(function(){ $("#refreshButton").click(); }, 6000);
+});
+
+//$(document).ready(function() {
+//    setInterval(function(){ location.reload(); }, 20000);
+//});
+JS;
+$this->registerJs($script);
+?>

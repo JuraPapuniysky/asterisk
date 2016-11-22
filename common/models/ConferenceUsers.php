@@ -101,20 +101,32 @@ class ConferenceUsers extends Model
     {
         if (self::$activeClients != null){
             foreach (self::$activeClients as $key => $activeClient){
-                $client = Clients::findOne(['callerid' => $activeClient['calleridnum']]);
-                $listUser = new ConferenceUsers();
-                $listUser->id = $client->id;
-                $listUser->name = $client->name;
-                $listUser->conference = $client->conference;
-                $listUser->callerId = $client->callerid;
-                $listUser->mutte = $client->mutte;
-                $listUser->video = $client->video;
-                $listUser->channel = $activeClient['channel'];
-                $listUser->isActive = true;
-                unset(self::$activeClients[$key]);
-                $client->channel = $listUser->channel;
-                $client->save();
-                array_push($conference, $listUser);
+                if(($client = Clients::findOne(['callerid' => $activeClient['calleridnum']])) !== null) {
+                    $listUser = new ConferenceUsers();
+                    $listUser->id = $client->id;
+                    $listUser->name = $client->name;
+                    $listUser->conference = $client->conference;
+                    $listUser->callerId = $client->callerid;
+                    $listUser->mutte = $client->mutte;
+                    $listUser->video = $client->video;
+                    $listUser->channel = $activeClient['channel'];
+                    $listUser->isActive = true;
+                    unset(self::$activeClients[$key]);
+                    $client->channel = $listUser->channel;
+                    $client->save();
+                    array_push($conference, $listUser);
+                }else{
+                    $client = new Clients();
+                    $client->callerid = $activeClient['calleridnum'];
+                    $client->channel = $activeClient['channel'];
+                    $client->conference = $activeClient['conference'];
+                    $client->mutte = 'no';
+                    $client->name = $activeClient['calleridnum'];
+                    $client->video = 'yes';
+                    if($client->save()){
+                        self::nonListPush();
+                    }
+                }
             }
             return $conference;
         }else{
