@@ -139,7 +139,6 @@ AssetBundle::register($this);
             ['/site/kick-all/',],
             ['class' => 'btn btn-danger glyphicon glyphicon-remove', 'id' => 'kick_users']
         );
-
         ?>
     </div>
 </div>
