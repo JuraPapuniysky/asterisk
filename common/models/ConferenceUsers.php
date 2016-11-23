@@ -70,6 +70,7 @@ class ConferenceUsers extends Model
             $user->id = $client->id;
             $user->name = $client->name;
             $user->conference = $client->conference;
+            $user->channel = $client->channel;
             $user->callerId = $client->callerid;
             $user->mutte = $client->mutte;
             $user->video = $client->video;
