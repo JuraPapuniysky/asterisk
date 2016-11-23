@@ -110,7 +110,6 @@ class ConferenceUsers extends Model
                     $listUser->callerId = $client->callerid;
                     $listUser->mutte = $client->mutte;
                     $listUser->video = $client->video;
-                    $listUser->channel = $activeClient['channel'];
                     $listUser->isActive = true;
                     unset(self::$activeClients[$key]);
                     $client->channel = $listUser->channel;

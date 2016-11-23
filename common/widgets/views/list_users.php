@@ -12,7 +12,18 @@ AssetBundle::register($this);
 
 
 ?>
+<?php
+$script = <<< JS
+$(document).ready(function() {
+    setInterval(function(){ $("#refreshButton").click(); }, 3000);
+});
 
+//$(document).ready(function() {
+//    setInterval(function(){ location.reload(); }, 20000);
+//});
+JS;
+$this->registerJs($script);
+?>
 
 <h3><span class="label label-info">Список учасников конференции <?= \Yii::$app->pamiconn->generalConference ?></span></h3>
 <div class="row">
@@ -39,9 +50,16 @@ AssetBundle::register($this);
 
 
 <div class="row">
-    <?php Pjax::begin();?>
-    <div class="col-md-4">
+    <?php
 
+    Pjax::begin();?>
+    <div class="col-md-4">
+        <?php echo Html::a(
+            '',
+            ['/site/index/'],
+            ['class' => 'glyphicon glyphicon-refresh', 'id' => 'refreshButton', ]
+
+        ); ?>
         <table class="table table table-condensed table-hover table-bordered">
 
             <thead>
@@ -59,11 +77,7 @@ AssetBundle::register($this);
             </thead>
             <tbody>
                 <?php
-                echo Html::a(
-                    '',
-                    ['/site/index/'],
-                    ['class' => 'glyphicon glyphicon-refresh', 'id' => 'refreshButton']
-                );
+
 
                 $count = 1; foreach ($conferences as $user){ ?>
                     <?php if ($user->isActive){ ?>
@@ -81,12 +95,12 @@ AssetBundle::register($this);
                              echo   Html::a(
                                     "",
                                     ['/site/call/', 'conference' => Yii::$app->pamiconn->generalConference, 'callerid' => $user->callerId],
-                                    ['class' => 'btn btn-lg btn-default fa fa-phone', 'id' => 'call-button']);
+                                    ['class' => 'btn btn-lg btn-default fa fa-phone', 'id' => 'call-button', 'data-pjax'=>0]);
                             }else{
                               echo  Html::a(
                                     "",
                                     ['/site/index/',],
-                                    ['class' => 'btn btn-lg btn-success fa fa-phone', 'id' => 'call-button']);
+                                    ['class' => 'btn btn-lg btn-success fa fa-phone', 'id' => 'call-button', 'data-pjax'=>0]);
                             }
 
 
@@ -142,15 +156,4 @@ AssetBundle::register($this);
         ?>
     </div>
 </div>
-<?php
-$script = <<< JS
-$(document).ready(function() {
-    setInterval(function(){ $("#refreshButton").click(); }, 6000);
-});
 
-//$(document).ready(function() {
-//    setInterval(function(){ location.reload(); }, 20000);
-//});
-JS;
-$this->registerJs($script);
-?>
