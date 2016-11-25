@@ -239,7 +239,16 @@ class SiteController extends Controller
         $pami->call($conference, $callerid);
         usleep(1000);
         $pami->closeAMI();
-        $confArray = $this->viewUsers($callerid);
+        //$confArray = $this->viewUsers($callerid);
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionCallList()
+    {
+        foreach (ConferenceUsers::getConference() as $user){
+            $user->call();
+        }
 
         return $this->redirect(['index']);
     }

@@ -77,12 +77,12 @@ $headpiece = \common\models\Clients::getHeadpiece();
                     <td><?= Html::a(
                             '<span class="glyphicon glyphicon-facetime-video"></span>',
                             ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                            ['class' => 'btn btn-default btn-lg', 'id' => 'muted_user']) ?>
+                            ['class' => 'btn btn-default btn-xs', 'id' => 'muted_user']) ?>
                     </td>
                     <td><?= Html::a(
                             '<span class="glyphicon glyphicon-picture"></span>',
                             ['/site/set-single-video/', 'conference' => $headpiece->conference, 'channel' => $headpiece->channel],
-                            ['class' => 'btn btn-default btn-lg ', 'id' => 'muted_user']) ?>
+                            ['class' => 'btn btn-default btn-xs ', 'id' => 'muted_user']) ?>
                     </td>
                 </tr>
             <?php } ?>

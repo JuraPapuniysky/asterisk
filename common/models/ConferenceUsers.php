@@ -69,14 +69,18 @@ class ConferenceUsers extends Model
             $user = new ConferenceUsers();
             $user->id = $client->id;
             $user->name = $client->name;
-            $user->conference = $client->conference;
             $user->channel = $client->channel;
             $user->callerId = $client->callerid;
-            $user->mutte = $client->mutte;
+            if($client->mutte != null){
+                $user->mutte = $client->mutte;
+            }else{
+                $user->mutte = 'no';
+            }
             $user->video = $client->video;
             foreach (self::$activeClients as $key => $activeClient){
                 if($user->callerId == $activeClient['calleridnum']){
                     $user->isActive = true;
+                    $user->conference = $activeClient['conference'];
                     $user->channel = $activeClient['channel'];
                     unset(self::$activeClients[$key]);
                 }
@@ -108,13 +112,15 @@ class ConferenceUsers extends Model
                     $listUser->name = $client->name;
                     $listUser->conference = $client->conference;
                     $listUser->callerId = $client->callerid;
-                    $listUser->mutte = $client->mutte;
+                    $listUser->channel = $activeClient['channel'];
+                    $listUser->mutte = 'yes';
                     $listUser->video = $client->video;
                     $listUser->isActive = true;
                     unset(self::$activeClients[$key]);
                     $client->channel = $listUser->channel;
-                    $client->save();
-                    array_push($conference, $listUser);
+                    if($client->save()){
+                        array_push($conference, $listUser);
+                    }
                 }else{
                     $client = new Clients();
                     $client->callerid = $activeClient['calleridnum'];
@@ -170,6 +176,21 @@ class ConferenceUsers extends Model
             $message = $pami->clientImpl->send(new CommandAction("confbridge unmute $client->conference $client->channel"));
             usleep(1000);
             return $message;
+        }
+    }
+
+    public function call()
+    {
+        if($this->isActive != true){
+            $pami = \Yii::$app->pamiconn;
+            $pami->initAMI();
+
+            $pami->call($pami->generalConference, $this->callerId);
+            usleep(1000);
+            $pami->closeAMI();
+            return true;
+        }else{
+            return false;
         }
     }
 
