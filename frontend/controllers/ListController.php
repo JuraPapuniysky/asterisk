@@ -38,8 +38,7 @@ class ListController extends Controller
     public function actionIndex()
     {
         $lists = ListModel::find()->all();
-        $list = $lists[0];
-        $li = $list->getListClients()->orderBy('name')->all();
+
         return $this->render('index', [
            'lists' => $lists
         ]);

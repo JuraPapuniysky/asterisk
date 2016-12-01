@@ -77,7 +77,7 @@ class SiteController extends Controller
 
     /**
      * Displays homepage.
-     *
+     * Homepage - the list of conference users
      * @return mixed
      */
     public function actionIndex()
@@ -88,7 +88,7 @@ class SiteController extends Controller
         $conf = $confUsers::getConference();
         $conf = $confUsers::nonListPush($conf);
 
-        \Yii::$app->pamiconn->closeAMI();
+
 
         return $this->render('index',[
            'conferences' => $conf,
@@ -231,19 +231,27 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Call to user action
+     * @param $conference number of conference
+     * @param $callerid number of user
+     * @return \yii\web\Response
+     */
     public function actionCall($conference, $callerid)
     {
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
-
         $pami->call($conference, $callerid);
         usleep(1000);
         $pami->closeAMI();
-        //$confArray = $this->viewUsers($callerid);
 
         return $this->redirect(['index']);
     }
 
+    /**
+     * Call to regular users of conference, from list
+     * @return \yii\web\Response
+     */
     public function actionCallList()
     {
         foreach (ConferenceUsers::getConference() as $user){
@@ -254,6 +262,7 @@ class SiteController extends Controller
     }
 
     /**
+     * Call checked users from calalog
      * @param $conference
      * @param $callerids
      * @return string
@@ -265,7 +274,7 @@ class SiteController extends Controller
         $pami->callChecked($conference, $callerids);
         $pami->closeAMI();
 
-        $confArray = $this->viewUsers();
+
 
         return $this->redirect(['index']);
 
@@ -290,6 +299,11 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Mutte user whis id = $userid
+     * @param $userid id of user
+     * @return \yii\web\Response
+     */
     public function actionMutte($userid)
     {
         $client = Clients::findOne(['id' => $userid]);
@@ -298,6 +312,11 @@ class SiteController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Unmutte user whis id = $userid.
+     * @param $userid id of user
+     * @return \yii\web\Response
+     */
     public function actionUnmutte($userid)
     {
         $client = Clients::findOne(['id' => $userid]);
@@ -306,6 +325,10 @@ class SiteController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * View all users from calalog whis active/non active condition.
+     * @return string
+     */
     public function actionCatalog()
     {
         $searchModel = new ClientsSearch();
@@ -324,11 +347,7 @@ class SiteController extends Controller
             $pami->closeAMI();
         }
 
-
-
-        $a = Clients::getUserConfId($this->viewUsers());
-
-        Yii::$app->pamiconn->confUser = $a;
+        Yii::$app->pamiconn->confUser = Clients::getUserConfId($this->viewUsers());
 
         return $this->render('catalog', [
             'model' => $model->find()->all(),
@@ -339,7 +358,11 @@ class SiteController extends Controller
     }
 
 
-
+    /**
+     * Mutte or unmutte active conference users whis depending on the $action
+     * @param string $action yes-mutte, no unmutte.
+     * @return \yii\web\Response
+     */
     public function actionMutteUnmutteAll($action)
     {
         $activeUsers = ConferenceUsers::getActiveClients();
@@ -355,6 +378,12 @@ class SiteController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Sets video of user whis channel = $channel in conference num = $conference
+     * @param string $conference
+     * @param string $channel
+     * @return \yii\web\Response
+     */
     public function actionSetSingleVideo($conference, $channel)
     {
         $pami = Yii::$app->pamiconn;
@@ -365,6 +394,12 @@ class SiteController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Kicks a user from conference num = $conference, whis channel = $chanel
+     * @param string $conference
+     * @param string $channel
+     * @return \yii\web\Response
+     */
     public function actionKick($conference, $channel)
     {
         $pami = Yii::$app->pamiconn;
@@ -372,7 +407,6 @@ class SiteController extends Controller
         $conf = new ConfBridgeActions($pami->clientImpl);
         $conf->confBridgeKick($conference, $channel);
         $pami->closeAMI();
-
 
         return $this->redirect(['index']);
     }

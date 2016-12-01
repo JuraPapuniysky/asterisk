@@ -134,8 +134,10 @@ class ConferenceUsers extends Model
                     }
                 }
             }
+            \Yii::$app->pamiconn->closeAMI();
             return $conference;
         }else{
+            \Yii::$app->pamiconn->closeAMI();
             return $conference;
         }
 

@@ -136,14 +136,6 @@ class ConfBridgeActions extends Model
         return $message;
     }
     
-    
-
-   // public function getCallerId($channel)
-   // {
-    //    list($num, $else) = explode('-', preg_replace("#[^0-9\-]*#is", "", $channel), 2);
-    //    return $num;
-   // }
-
 
     public function unsetElems($array, $count)
     {
