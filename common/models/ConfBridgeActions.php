@@ -24,6 +24,10 @@ class ConfBridgeActions extends Model
      */
     public function confBridgeKick($conference, $channel)
     {
+        foreach (Clients::findAll(['video' => 'yes']) as $client){
+            $client->video = 'no';
+            $client->save();
+        }
         $message = $this->clientImpl->send(new CommandAction("confbridge kick $conference $channel"));
         return $message;
     }

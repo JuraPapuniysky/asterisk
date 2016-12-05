@@ -386,11 +386,7 @@ class SiteController extends Controller
      */
     public function actionSetSingleVideo($conference, $channel)
     {
-        $pami = Yii::$app->pamiconn;
-        $pami->initAMI();
-        $pami->setSingleVideo($conference, $channel);
-        $pami->closeAMI();
-
+        ConferenceUsers::setVideo($conference, $channel);
         return $this->redirect(['index']);
     }
 

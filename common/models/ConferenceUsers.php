@@ -6,6 +6,7 @@ namespace common\models;
 
 use yii\base\Model;
 use PAMI\Message\Action\CommandAction;
+use common\amiactions\ConfbridgeSetSingleVideoSrc;
 
 class ConferenceUsers extends Model
 {
@@ -113,7 +114,7 @@ class ConferenceUsers extends Model
                     $listUser->conference = $client->conference;
                     $listUser->callerId = $client->callerid;
                     $listUser->channel = $activeClient['channel'];
-                    $listUser->mutte = 'yes';
+                    $listUser->mutte = $client->mutte;
                     $listUser->video = $client->video;
                     $listUser->isActive = true;
                     unset(self::$activeClients[$key]);
@@ -128,7 +129,7 @@ class ConferenceUsers extends Model
                     $client->conference = $activeClient['conference'];
                     $client->mutte = 'no';
                     $client->name = $activeClient['calleridnum'];
-                    $client->video = 'yes';
+                    $client->video = 'no';
                     if($client->save()){
                         self::nonListPush();
                     }
@@ -196,7 +197,22 @@ class ConferenceUsers extends Model
         }
     }
 
-
+    public static function setVideo($conference, $channel)
+    {
+        $clients = Clients::findAll(['video' => 'yes']);
+        foreach ($clients as $client){
+            $client->video = 'no';
+            $client->save();
+        }
+        $client = Clients::findOne(['channel' => $channel]);
+        $client->video = 'yes';
+        $client->save();
+        $pami = \Yii::$app->pamiconn;
+        $pami->initAmi();
+        $message = $pami->clientImpl->send(new ConfbridgeSetSingleVideoSrc($conference, $channel));
+        usleep(1000);
+        return $message;
+    }
 
 
 

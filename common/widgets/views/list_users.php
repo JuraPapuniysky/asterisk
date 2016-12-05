@@ -136,10 +136,19 @@ $this->registerJs($script);
 
                                 );
                             }?></td>
-                        <td><?php if($user->isActive){ echo Html::a(
+                        <td><?php if($user->isActive and $user->video == 'no'){
+                            echo Html::a(
                                 '<span class="glyphicon glyphicon-facetime-video"></span>',
                                 ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                                ['class' => 'btn btn-default btn-sm', 'id' => 'muted_user']);} ?>
+                                ['class' => 'btn btn-default btn-sm', 'id' => 'muted_user']);
+                                }elseif($user->isActive and $user->video == 'yes'){
+                            echo Html::a(
+                                '<span class="glyphicon glyphicon-facetime-video"></span>',
+                                ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
+                                ['class' => 'btn btn-success btn-sm', 'id' => 'muted_user']);
+
+                                }
+                                ?>
                         </td>
                         <td><?php if($user->isActive){ echo Html::a(
                                 '<span class="glyphicon glyphicon-picture"></span>',
