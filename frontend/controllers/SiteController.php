@@ -401,6 +401,9 @@ class SiteController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * @return \yii\web\Response
+     */
     public function actionKickAll()
     {
         foreach (Clients::findAll(['video' => 'yes']) as $client){
@@ -417,6 +420,11 @@ class SiteController extends Controller
 
     }
 
+    /**
+     * @param $callerId
+     * @param null $user
+     * @return bool|static
+     */
     protected function findByCallerId($callerId, $user = null)
     {
         if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
@@ -426,6 +434,10 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * @param $channel
+     * @return static
+     */
     protected static function findByChannel($channel)
     {
         if (($model = Clients::findOne(['channel' => $channel,])) !== null) {
@@ -435,6 +447,9 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * @return string
+     */
     public function actionTest()
     {
         $pami = Yii::$app->pamiconn;
