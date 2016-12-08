@@ -252,10 +252,12 @@ class SiteController extends Controller
      */
     public function actionCallList()
     {
+        $pami = \Yii::$app->pamiconn;
+        $pami->initAMI();
         foreach (ConferenceUsers::getConference() as $user){
-            $user->call();
+            $user->call($pami);
         }
-
+        $pami->closeAMI();
         return $this->redirect(['index']);
     }
 
@@ -271,12 +273,7 @@ class SiteController extends Controller
         $pami->initAMI();
         $pami->callChecked($conference, $callerids);
         $pami->closeAMI();
-
-
-
         return $this->redirect(['index']);
-
-
     }
 
 
@@ -345,8 +342,6 @@ class SiteController extends Controller
             $pami->closeAMI();
         }
 
-        Yii::$app->pamiconn->confUser = Clients::getUserConfId($this->viewUsers());
-
         return $this->render('catalog', [
             'model' => $model->find()->all(),
             'callUser' => $callUser,
@@ -396,22 +391,26 @@ class SiteController extends Controller
      */
     public function actionKick($conference, $channel)
     {
+        $client = Clients::findOne(['channel' => $channel]);
+        $client->video = 'no';
+        $client->save();
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
-        $conf = new ConfBridgeActions($pami->clientImpl);
-        $conf->confBridgeKick($conference, $channel);
+        ConferenceUsers::confBridgeKick($conference, $channel, $pami);
         $pami->closeAMI();
-
         return $this->redirect(['index']);
     }
 
     public function actionKickAll()
     {
+        foreach (Clients::findAll(['video' => 'yes']) as $client){
+            $client->video = 'no';
+            $client->save();
+        }
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
-        $conf = new ConfBridgeActions($pami->clientImpl);
         foreach (ConferenceUsers::getActiveClients() as $user){
-            $conf->confBridgeKick($user['conference'], $user['channel']);
+            ConferenceUsers::confBridgeKick($user['conference'], $user['channel'], $pami);
         }
         $pami->closeAMI();
         return $this->redirect(['index']);

@@ -36,9 +36,6 @@ class PAMIConn extends Component
             $this->clientImpl = new ClientImpl($this->options);
             $this->clientImpl->registerEventListener(new EventListener());
             $this->clientImpl->open();
-
-
-
         } catch (Exception $e) {
             throw new NotFoundHttpException();
         }
@@ -72,9 +69,9 @@ class PAMIConn extends Component
      * @param $conferese
      * @return array
      */
-    public function getConferenceUsers($conferese)
+    public function getConferenceUsers($conferece)
     {
-        $message = $this->clientImpl->send(new MeetmeListAction($conferese));
+        $message = $this->clientImpl->send(new MeetmeListAction($conferece));
         usleep(1000);
         return $message;
     }

@@ -192,21 +192,23 @@ class ConferenceUsers extends Model
         }
     }
 
-    public function call()
+    public function call($pami)
     {
         if($this->isActive != true){
-            $pami = \Yii::$app->pamiconn;
-            $pami->initAMI();
-
             $pami->call($pami->generalConference, $this->callerId);
             usleep(1000);
-            $pami->closeAMI();
             return true;
         }else{
             return false;
         }
     }
 
+    /**
+     * Shows video from user phone in $conference, with $channel
+     * @param $conference
+     * @param $channel
+     * @return mixed
+     */
     public static function setVideo($conference, $channel)
     {
         $clients = Clients::findAll(['video' => 'yes']);
@@ -224,6 +226,16 @@ class ConferenceUsers extends Model
         return $message;
     }
 
-
+    /**
+     * Kick user from conference
+     * @param $conference
+     * @param $channel
+     * @param $pami
+     * @return mixed
+     */
+    public static function confBridgeKick($conference, $channel, $pami)
+    {
+        return $pami->clientImpl->send(new CommandAction("confbridge kick $conference $channel"));
+    }
 
 }
