@@ -77,7 +77,11 @@ class ConferenceUsers extends Model
             }else{
                 $user->mutte = 'no';
             }
-            $user->video = $client->video;
+            if($client->video == null){
+                $user->video = 'no';
+            }else{
+                $user->video = $client->video;
+            }
             foreach (self::$activeClients as $key => $activeClient){
                 if($user->callerId == $activeClient['calleridnum']){
                     $user->isActive = true;
@@ -89,6 +93,7 @@ class ConferenceUsers extends Model
             $clients = Clients::findOne(['id' => $client->id]);
             $clients->channel = $user->channel;
             $clients->mutte = $user->mutte;
+            $clients->video = $user->video;
             $clients->save();
             array_push($conference, $user);
 
@@ -115,7 +120,12 @@ class ConferenceUsers extends Model
                     $listUser->callerId = $client->callerid;
                     $listUser->channel = $activeClient['channel'];
                     $listUser->mutte = $client->mutte;
-                    $listUser->video = $client->video;
+                    if($client->video == null){
+                        $listUser->video = 'no';
+                    }else{
+                        $listUser->video = $client->video;
+                    }
+
                     $listUser->isActive = true;
                     unset(self::$activeClients[$key]);
                     $client->channel = $listUser->channel;

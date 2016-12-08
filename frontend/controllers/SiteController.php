@@ -88,8 +88,6 @@ class SiteController extends Controller
         $conf = $confUsers::getConference();
         $conf = $confUsers::nonListPush($conf);
 
-
-
         return $this->render('index',[
            'conferences' => $conf,
         ]);
