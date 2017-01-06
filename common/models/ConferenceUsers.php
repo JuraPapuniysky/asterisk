@@ -74,6 +74,8 @@ class ConferenceUsers extends Model
             $user->callerId = $client->callerid;
             if($client->mutte != null){
                 $user->mutte = $client->mutte;
+            }elseif ($client->mutte == 'yes'){
+                self::mutteUser($client);
             }else{
                 $user->mutte = 'no';
             }
