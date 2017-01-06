@@ -120,6 +120,9 @@ class ConferenceUsers extends Model
                     $listUser->callerId = $client->callerid;
                     $listUser->channel = $activeClient['channel'];
                     $listUser->mutte = $client->mutte;
+                    if($client->mutte == 'yes'){
+                        self::mutteUser($client);
+                    }
                     if($client->video == null){
                         $listUser->video = 'no';
                     }else{

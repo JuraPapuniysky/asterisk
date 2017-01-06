@@ -145,7 +145,7 @@ $this->registerJs($script);
                             echo Html::a(
                                 '<span class="glyphicon glyphicon-facetime-video"></span>',
                                 ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                                ['class' => 'btn btn-success btn-sm', 'id' => 'muted_user']);
+                                ['class' => 'btn btn-success btn-sm', 'id' => 'muted_user', 'autofocus']);
 
                                 }
                                 ?>
