@@ -87,6 +87,7 @@ class PAMIConn extends Component
         if(substr($callerId, 0, 3) == '894') {
             $originate = new OriginateAction("SIP/$callerId");
             $originate->setCallerId($callerId);
+            $originate->setCodecs(['alaw','h264']);
             $originate->setTimeout(10000);
         }elseif (strlen($callerId) == 3 or substr($callerId, 0, 3) != '894'){
             $originate = new OriginateAction("SIP/SOE_193/$callerId");
