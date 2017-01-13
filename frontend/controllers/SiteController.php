@@ -2,7 +2,6 @@
 namespace frontend\controllers;
 
 
-
 use common\models\CallUserManual;
 use common\models\Clients;
 use common\models\ClientsSearch;
@@ -88,8 +87,8 @@ class SiteController extends Controller
         $conf = $confUsers::getConference();
         $conf = $confUsers::nonListPush($conf);
 
-        return $this->render('index',[
-           'conferences' => $conf,
+        return $this->render('index', [
+            'conferences' => $conf,
         ]);
     }
 
@@ -254,7 +253,7 @@ class SiteController extends Controller
     {
         $pami = \Yii::$app->pamiconn;
         $pami->initAMI();
-        foreach (ConferenceUsers::getConference() as $user){
+        foreach (ConferenceUsers::getConference() as $user) {
             $user->call($pami);
         }
         $pami->closeAMI();
@@ -289,7 +288,7 @@ class SiteController extends Controller
 
         $aster->process();
         $aster->close();
-        return $this->render('index',[
+        return $this->render('index', [
             'module' => $redir,
         ]);
     }
@@ -333,8 +332,7 @@ class SiteController extends Controller
 
         $callUser = new CallUserManual();
 
-        if($callUser->load(Yii::$app->request->post()))
-        {
+        if ($callUser->load(Yii::$app->request->post())) {
             $pami = Yii::$app->pamiconn;
             $pami->initAMI();
             $pami->call($callUser->conference, $callUser->userNumber);
@@ -360,11 +358,11 @@ class SiteController extends Controller
     {
         $activeUsers = ConferenceUsers::getActiveClients();
 
-        foreach ($activeUsers as $user){
+        foreach ($activeUsers as $user) {
             $client = Clients::findOne(['callerid' => $user['calleridnum']]);
-            if($action == 'yes') {
+            if ($action == 'yes') {
                 ConferenceUsers::mutteUser($client);
-            }elseif ($action == 'no'){
+            } elseif ($action == 'no') {
                 ConferenceUsers::unmutteUser($client);
             }
         }
@@ -406,13 +404,13 @@ class SiteController extends Controller
      */
     public function actionKickAll()
     {
-        foreach (Clients::findAll(['video' => 'yes']) as $client){
+        foreach (Clients::findAll(['video' => 'yes']) as $client) {
             $client->video = 'no';
             $client->save();
         }
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
-        foreach (ConferenceUsers::getActiveClients() as $user){
+        foreach (ConferenceUsers::getActiveClients() as $user) {
             ConferenceUsers::confBridgeKick($user['conference'], $user['channel'], $pami);
         }
         $pami->closeAMI();
@@ -430,7 +428,7 @@ class SiteController extends Controller
         if (($model = Clients::findOne(['callerid' => $callerId,])) !== null) {
             return $model;
         } else {
-           return false;
+            return false;
         }
     }
 
@@ -454,12 +452,8 @@ class SiteController extends Controller
     {
         $pami = Yii::$app->pamiconn;
         $pami->initAMI();
-        $conf = new ConfBridgeActions($pami->clientImpl);
-        $info = $conf->confBridgeList();
-
-        return $this->render('test', [
-            'info' => $info,
-        ]);
+        $pami->groupCall('000', ['894104']);
+        $pami->closeAMI();
     }
 
 

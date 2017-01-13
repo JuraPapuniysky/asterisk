@@ -84,7 +84,7 @@ class PAMIConn extends Component
     public function call($conference, $callerId)
     {
 
-        if(substr($callerId, 0, 3) == '894') {
+        if(substr($callerId, 0, 3) == '894' or substr($callerId, 0, 3) == '865') {
             $originate = new OriginateAction("SIP/$callerId");
             $originate->setCallerId($callerId);
             $originate->setCodecs(['alaw','h264']);
@@ -169,6 +169,19 @@ class PAMIConn extends Component
         $message = $this->clientImpl->send(new ConfbridgeSetSingleVideoSrc($conference, $channel));
         usleep(1000);
         return $message;
+    }
+
+    public function groupCall($conference, Array $callerIds)
+    {
+        $originate = new Originate($callerIds);
+        //$originate->setCallerId('000');
+        $originate->setCodecs(['alaw','h264']);
+        $originate->setTimeout(10000);
+        $originate->setContext($this->context);
+        $originate->setExtension($conference);
+        $originate->setPriority(1);
+        usleep(1000);
+        return $this->clientImpl->send($originate);
     }
 
 
