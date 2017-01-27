@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property integer $list_id
  * @property integer $client_id
+ * @property integer $position
  *
  * @property Clients $client
  * @property List $list
@@ -30,7 +31,7 @@ class ListClient extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['list_id', 'client_id'], 'integer'],
+            [['list_id', 'client_id', 'position'], 'integer'],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clients::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['list_id'], 'exist', 'skipOnError' => true, 'targetClass' => ListModel::className(), 'targetAttribute' => ['list_id' => 'id']],
         ];
@@ -45,6 +46,7 @@ class ListClient extends \yii\db\ActiveRecord
             'id' => 'ID',
             'list_id' => 'List ID',
             'client_id' => 'Client ID',
+            'position' => 'Position',
         ];
     }
 

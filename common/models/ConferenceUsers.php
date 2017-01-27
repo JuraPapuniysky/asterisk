@@ -27,7 +27,26 @@ class ConferenceUsers extends Model
      */
     protected static function getConfList()
     {
-        self::$confList = ListModel::find()->where(['name' => '123'])->one()->getListClients()->orderBy('name')->all();
+        self::$confList = [];
+        $confList = ListModel::find()->where(['name' => '123'])->one()->getListClients()->all();
+        foreach ($confList as $user){
+            $user->position = ListClient::findOne(['client_id' => $user->id, 'list_id' => '1'])->position;
+            array_push(self::$confList, $user);
+        }
+        uasort(self::$confList, function ($f1,$f2){
+            if($f1->position < $f2->position){
+                return -1;
+            }
+            elseif($f1->position > $f2->position) {
+                return 1;
+            }
+            else{
+                return 0;
+            }
+        });
+
+        return self::$confList;
+
     }
 
     /**

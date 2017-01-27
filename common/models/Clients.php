@@ -20,6 +20,7 @@ use Yii;
 class Clients extends \yii\db\ActiveRecord
 {
 
+    public $position;
     public $isCall;
 
     /**
@@ -58,7 +59,9 @@ class Clients extends \yii\db\ActiveRecord
             'video' => 'Video',
         ];
     }
-    
+
+
+
     public static function initClient($user, $conference, $channel)
     {
         $user->channel = $channel;
