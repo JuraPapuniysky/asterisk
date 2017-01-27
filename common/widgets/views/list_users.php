@@ -23,21 +23,9 @@ JS;
 $this->registerJs($script);
 ?>
 <div class="row">
+
     <div class="col-md-2">
-        <?php echo Html::a(
-            "Отключить всех",
-            ['/site/kick-all/',],
-            ['class' => 'btn btn-danger glyphicon glyphicon-remove', 'id' => 'kick_users']
-        );
-        ?>
-    </div>
-    <div class="col-md-2">
-        <?php echo Html::a(
-            "Подключить всех",
-            ['/site/call-list/',],
-            ['class' => 'btn btn-success glyphicon glyphicon-remove', 'id' => 'call_users']
-        );
-        ?>
+
     </div>
 </div>
 
@@ -45,7 +33,7 @@ $this->registerJs($script);
     <?php
 
     Pjax::begin(); ?>
-    <div class="col-md-5">
+    <div class="col-md-7">
         <?php echo Html::a(
             '',
             ['/site/index/'],
@@ -56,8 +44,18 @@ $this->registerJs($script);
 
             <thead>
             <tr>
-                <th></th>
-                <th></th>
+                <th><?php echo Html::a(
+                        "",
+                        ['/site/kick-all/',],
+                        ['class' => 'btn btn-danger btn-sm glyphicon glyphicon-remove', 'id' => 'kick_users']
+                    );
+                    ?></th>
+                <th><?php echo Html::a(
+                        "",
+                        ['/site/call-list/',],
+                        ['class' => 'btn btn-success btn-sm fa fa-phone', 'id' => 'call_users']
+                    );
+                    ?></th>
                 <th></th>
                 <th>№ конф</th>
                 <th>Имя участника конференции</th>
@@ -84,8 +82,8 @@ $this->registerJs($script);
                     </div>
                     _______
                 </th>
-                <th></th>
-                <th></th>
+                <th style="color: #ffffff">---------------</th>
+                <th style="color: #ffffff">---------------</th>
             </tr>
             </thead>
             <tbody>
@@ -141,12 +139,12 @@ $this->registerJs($script);
                         echo Html::a(
                             '<span class="glyphicon glyphicon-facetime-video"></span>',
                             ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                            ['class' => 'btn btn-default btn-sm', 'id' => 'muted_user']);
+                            ['class' => 'btn btn-default btn-sm btn-block', 'id' => 'muted_user']);
                     } elseif ($user->isActive and $user->video == 'yes') {
                         echo Html::a(
                             '<span class="glyphicon glyphicon-facetime-video"></span>',
                             ['/site/set-single-video/', 'conference' => $user->conference, 'channel' => $user->channel],
-                            ['class' => 'btn btn-success btn-sm', 'id' => 'muted_user', 'autofocus']);
+                            ['class' => 'btn btn-success btn-sm btn-block', 'id' => 'muted_user', 'autofocus']);
 
                     }
                     ?>
@@ -155,7 +153,7 @@ $this->registerJs($script);
                         echo Html::a(
                             '<span class="glyphicon glyphicon-picture"></span>',
                             ['/site/set-single-video/', 'conference' => $headpiece->conference, 'channel' => $headpiece->channel],
-                            ['class' => 'btn btn-default btn-sm ', 'id' => 'muted_user']);
+                            ['class' => 'btn btn-default btn-sm btn-block', 'id' => 'muted_user']);
                     } ?>
                 </td>
                 </tr>
